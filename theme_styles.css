@@ -1,0 +1,109 @@
+
+@font-face {
+    font-family: 'Caros';
+    src: url('https://cdn.awsli.com.br/2867/2867811/arquivos/cretype-caros-light.otf') format('opentype');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Caros';
+    src: url('https://cdn.awsli.com.br/2867/2867811/arquivos/cretype-caros.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Caros';
+    src: url('https://cdn.awsli.com.br/2867/2867811/arquivos/cretype-caros-medium.otf') format('opentype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Caros';
+    src: url('https://cdn.awsli.com.br/2867/2867811/arquivos/cretype-caros-extrabold.otf') format('opentype');
+    font-weight: 800;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Caros';
+    src: url('https://cdn.awsli.com.br/2867/2867811/arquivos/cretype-caros-black.otf') format('opentype');
+    font-weight: 900;
+    font-style: normal;
+}
+
+:root{
+    --c1:#FC3D9D;
+    --c2:#EB1528;
+    --c3:#FFE2CE;
+    --c4:#3F3C3C;
+    /* PRIMARY */
+    --primaryColor: #000000;
+    --secondaryColor: #666;
+    --buttonColor: #000;
+    --bodyFontFamily: "Caros";
+    --bodyFontWeight: 400;
+    --bodyFontSize: 12px;
+    
+    /* TITLES */
+    --titleFontFamily: "Caros";
+    --titleFontWeight: 600;
+    --titleFontSize: 24px;
+    --titleFontTransform: uppercase;
+    --titleFontColor: #000;
+
+    /* MENU */
+    --menuFontFamily: "Caros";
+    --menuFontWeight: 800;
+    --menuFontSize: 14px;
+    --menuFontTransform: uppercase;
+    --menuFontColor: #000;
+
+    /* FOOTER */
+    --footerFontFamily: "Caros";
+    --footerFontWeight: 400;
+    --footerFontSize: 14px;
+    --footerFontTransform: normal;
+    --footerFontColor: #878787;
+
+    /* FOOTER TITLES */
+    --footerTitleFontFamily: "Caros";
+    --footerTitleFontWeight: 600;
+    --footerTitleFontSize: 18px;
+    --footerTitleFontTransform: normal;
+    --footerTitleFontColor: #000;
+
+    /* PRODUCT LISTING */
+    --productFontFamily: "Caros";
+    --productFontWeight: 500;
+    --productFontSize: 14px;
+    --productFontColor: #000;
+
+    
+    --productPriceFontFamily: "Caros";
+    --productPriceFontWeight: 400;
+    --productPriceFontSize: 14px;
+    --productPriceColor:#000;
+    
+    --productPriceStrikeFontWeight: 300;
+    --productPriceStrikeFontSize: 12px;
+    --productPriceStrikeColor:#666;  
+}
+
+#theme_header-logo{order: 2;}
+#theme_header-menu{order: 1;}
+#theme_header-functions-block{order: 3;}
+.theme_benefitsStripe strong{
+    font-size: 14px;
+}
+
+.listagem-item{
+    text-align: center;
+    --productFontSize: 14px;
+    --productFontWeight:bold;
+}
+.listagem .listagem-item .preco-produto .preco-parcela{
+    font-size: 12px;
+}
