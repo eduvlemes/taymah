@@ -8,28 +8,28 @@
 
 @font-face {
     font-family: 'Caros';
-    src: url('https://cdn.awsli.com.br/2867/2867811/arquivos/cretype-caros.otf') format('opentype');
+    src: url('https://cdn.awsli.com.br/2867/2867811/arquivos/cretype-caros.woff2') format('woff2');
     font-weight: 400;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'Caros';
-    src: url('https://cdn.awsli.com.br/2867/2867811/arquivos/cretype-caros-medium.otf') format('opentype');
+    src: url('https://cdn.awsli.com.br/2867/2867811/arquivos/cretype-caros-medium.woff2') format('woff2');
     font-weight: 500;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'Caros';
-    src: url('https://cdn.awsli.com.br/2867/2867811/arquivos/cretype-caros-extrabold.otf') format('opentype');
+    src: url('https://cdn.awsli.com.br/2867/2867811/arquivos/cretype-caros-extrabold.woff2') format('woff2');
     font-weight: 800;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'Caros';
-    src: url('https://cdn.awsli.com.br/2867/2867811/arquivos/cretype-caros-black.otf') format('opentype');
+    src: url('https://cdn.awsli.com.br/2867/2867811/arquivos/cretype-caros-black.woff2') format('woff2');
     font-weight: 900;
     font-style: normal;
 }
@@ -89,7 +89,7 @@
     
     --productPriceStrikeFontWeight: 300;
     --productPriceStrikeFontSize: 12px;
-    --productPriceStrikeColor:#666;  
+    --productPriceStrikeColor:var(--c4);  
 }
 
 #theme_header-logo{order: 2;}
@@ -107,3 +107,96 @@
 .listagem .listagem-item .preco-produto .preco-parcela{
     font-size: 12px;
 }
+
+.listagem .listagem-item .imagem-produto{
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.listagem .listagem-item .preco-produto .preco-parcela,
+.listagem .listagem-item .preco-produto .preco-parcela *{
+    color: var(--c4);
+}
+
+#rodape,
+#rodape .theme_footer-main,
+#rodape .institucional{
+    background: var(--c3);
+}
+#rodape .institucional{padding: 1rem;}
+#barraNewsletter,#barraNewsletter .show-hide, #barraNewsletter .componente, #barraNewsletter.posicao-rodape .conteiner{
+    background: transparent;
+}
+#barraNewsletter{
+    box-shadow: 0px 0px 0px;
+}
+.theme_footer-newsletter{
+    background: var(--c4);
+    box-shadow: 0px 0px 0px;
+    margin: 0;
+    padding: 1rem 2rem;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    border-radius: 15px;
+}
+#theme_footer-content-social{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: #fff;
+}
+#theme_footer-content-social *{
+    color: #fff;
+}
+#barraNewsletter .conteiner{
+    width: -webkit-fill-available;
+    max-width: 100%;
+    box-sizing: border-box;
+    border-radius: 15px;
+    padding: 1rem!important;
+}
+
+#barraNewsletter .componente div.newsletter-cadastro.input-conteiner{
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid #fff;
+    border-radius: 0!important;
+    width: 520px;
+}
+#barraNewsletter .componente div.newsletter-cadastro.input-conteiner input::placeholder{
+    color: #fff;
+    opacity: 1;
+}
+#barraNewsletter .componente div.newsletter-cadastro.input-conteiner input{
+    background: transparent;
+    color: #fff;
+    
+}
+#barraNewsletter .componente .botao{
+    border-radius: 0px;
+    background: transparent;
+}
+
+#barraNewsletter .componente .interno-conteudo{
+    display: flex;
+    width: fit-content;
+    max-width: 100%;
+    gap: 2rem;
+    align-items: center;
+}
+
+#barraNewsletter .componente .interno-conteudo .texto-newsletter{
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #fff !important;
+    max-width: unset;
+    white-space: normal;
+    line-height: initial;
+    padding: 0;
+}
+
+#barraNewsletter.posicao-rodape .conteiner{padding: 0;}

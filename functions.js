@@ -332,9 +332,12 @@ theme.build.footer = function(template){
     $('#theme_footer-content3').append(theme.footerSeals);
 
     if(theme.settings.footer.logo) $('#theme_footer-content-institutional').append($(theme.logo).find('a').html());
+   
     if(theme.settings.footer.institutional) $('#theme_footer-content-institutional').append('<p>' + theme.storeDescription + '</p>');
-    if(theme.settings.footer.institutional && theme.settings.footer.social) $('#theme_footer-content-institutional').append('<div id="theme_footer-content-institutional-social">' + theme.socialIcons + '</div>');
+   
+    if(theme.settings.footer.social) $('#theme_footer-content-social').append( theme.socialIcons );
     
+    if(theme.footerContacts) $('#theme_footer-content-contact').append(theme.footerContacts);
     theme.newsletter == "" ? $('#theme_footer-content4').parent('.col-auto').remove() : $('#theme_footer-content4').append(theme.newsletter);
     
     $('#rodape .selos').find('.titulo').remove();
@@ -586,19 +589,7 @@ theme.functions.customBanners = function(ref){
         }
     });
 
-    //daqui para baixo somente os que tem mobile
     
-    //banners mobile
-    $('.secao-banners .banner.cheio img').each(function(){
-        let alt = $(this).attr('alt');        
-        if(!alt.includes('[mobile]') && theme.isMobile){
-            $(this).closest('li').remove();                        
-        }
-        if(alt.includes('[mobile]') && !theme.isMobile){
-            $(this).closest('li').remove();                        
-        }
-    });
-
     //banners vitrine
     $('.secao-banners .banner.cheio img').each(function(){
         let alt = $(this).attr('alt');
@@ -611,13 +602,35 @@ theme.functions.customBanners = function(ref){
                 }
                 $(this).closest('li').appendTo('#theme_customBanners-' + match[1]);               
             }
-        }else{
-            if(movie && !alt.includes('[movie]')){
-                $(this).closest('li').remove();
+        }
+        if(alt.includes('[card-')){
+            let regExp = /\[card-(.*?)\]/;
+            let match = regExp.exec(alt);
+            if($('.' + match[1]).length == 1){                
+                 $('.' + match[1] + ' + ul').prepend(`<li class="theme_cardBanner-${match[1]}"></li>`);
+                $(this).closest('li').appendTo(`.theme_cardBanner-${match[1]}`);  
+                $(`.theme_cardBanner-${match[1]} > li`).wrap('<div class="item"/>').contents().unwrap();
+                
             }
+        }
+        if(movie && !alt.includes('[movie]')){
+            $(this).closest('li').remove();
         }
     });    
     $('.theme_customBanners li').wrap('<div class="item"/>').contents().unwrap();
+
+    if($(`.banner.cheio .flexslider img`).length > 0){
+        theme.functions.flexDestroy($(`.banner.cheio .flexslider`));
+        $(`.banner.cheio .slides`).slick({
+            dots: $(`.banner.cheio .flexslider img`).length > 1 ? true : false,
+            infinite: true,
+            autoplay:true,
+            autoplaySpeed:3000,
+            speed: 500,
+            slidesToShow: 1,
+            slidesToScroll: 1
+        });
+    }
 };
 
 theme.functions.createField = function (oObj){
@@ -697,11 +710,12 @@ theme.functions.init = function(){
 
     theme.currentPage = $('body').attr('class').split(' ')[0].trim();
     theme.searchForm = $('<div></div>').append($('#cabecalho .busca #form-buscar').first().clone()).html();
-    theme.socialIcons = $('<div></div>').append($('.barra-inicial .lista-redes a').clone()).html();
+    theme.socialIcons = theme.socialIcons ? theme.socialIcons : $('<div></div>').append($('.barra-inicial .lista-redes a').clone()).html();
 
     theme.headerMenu = $('<div></div>').append($('.menu.superior').clone()).html();
     theme.footerCategories = $('<div></div>').append($('.links-rodape-categorias > ul').clone()).html();
     theme.footerPages = $('<div></div>').append($('.links-rodape-paginas > ul').clone()).html();
+    
 
     theme.footerSeals = $('<div></div>').append($('#rodape .selos').clone()).html();
     theme.footerPayments = $('<div></div>').append($('#rodape .bandeiras-pagamento').clone()).html();
@@ -1678,9 +1692,10 @@ $(document).ready(function(){
     theme.worker.sizeTable.match = $('.pagina-produto').length > 0;
     theme.worker.floatingWhatsapp.config.number =  "55" + $('.barra-inicial .canais-contato .fa-whatsapp').parent().text().replace('Whatsapp: ','').replace('(','').replace(')','').replace('-','').replaceAll(' ','').trim();
 
-    
+    theme.functions.customBanners();
     theme.functions.beforeInit();
     theme.functions.init();
+    
     theme.worker.run();
 
     theme.functions.productListImageSize(theme.settings.imageSize);

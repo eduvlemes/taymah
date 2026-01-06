@@ -3496,4 +3496,30 @@ body:not(.pagina-inicial) .secao-banners .banner.cheio img{
         max-width: 100%;
     }
 }
+.listagem [class^="theme_cardBanner"] .item{
+    margin: 15px 0;
+}
+.listagem [class^="theme_cardBanner"] .item img{
+    object-fit: cover;
+}
+.banner.cheio{}
+.banner.cheio img{
+    width: 100%;
+}
+
+.banner.cheio .slick-dots{
+    bottom: 15px;
+}
+.banner.cheio .slick-dots button{
+    background: var(--cor-principal);
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    font-size: 0;
+    opacity: .3;
+}
+.banner.cheio .slick-dots .slick-active button {
+    opacity: 1;
+}
 
