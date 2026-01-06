@@ -66,12 +66,12 @@
     --footerFontWeight: 400;
     --footerFontSize: 14px;
     --footerFontTransform: normal;
-    --footerFontColor: #878787;
+    --footerFontColor: var(--c4);
 
     /* FOOTER TITLES */
     --footerTitleFontFamily: "Caros";
     --footerTitleFontWeight: 600;
-    --footerTitleFontSize: 18px;
+    --footerTitleFontSize: 16px;
     --footerTitleFontTransform: normal;
     --footerTitleFontColor: #000;
 
@@ -120,10 +120,17 @@
 
 #rodape,
 #rodape .theme_footer-main,
-#rodape .institucional{
-    background: var(--c3);
+#rodape .institucional,
+#rodape > div:last-child{
+    background: var(--c3)!important;
 }
-#rodape .institucional{padding: 1rem;}
+#rodape > div:last-child{
+    border-top: 1px solid #f2f2f2!important;
+}
+#rodape > div:last-child > .conteiner{
+    padding: 1rem 15px;
+}
+#rodape .institucional{padding: 2rem 2rem 0rem 2rem;}
 #barraNewsletter,#barraNewsletter .show-hide, #barraNewsletter .componente, #barraNewsletter.posicao-rodape .conteiner{
     background: transparent;
 }
