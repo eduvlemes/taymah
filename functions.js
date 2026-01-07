@@ -277,6 +277,7 @@ theme.stripe.position = 2;
 theme.stripe.fixed = false;
 
 theme.benefitsStripe = [];
+theme.benefitsStripe.showOn = ".pagina-inicial";
 theme.benefitsStripe.active = false;
 theme.benefitsStripe.list = [];
 theme.benefitsStripe.config = {
@@ -840,7 +841,7 @@ theme.functions.flags = function(){
 theme.settings.sizesOrder = ['PP', 'P', 'M', 'G', 'GG', 'XG'];
 theme.settings.sizesDisplayName = "Tamanho",
 theme.settings.showSizesAtList = true;
-
+theme.settings.showButtonsAtList = false;
 theme.functions.placeSizeAtList = function(oObj, info){        
         let url = oObj.find(`.nome-produto`).attr(`href`);
         oObj.find('.info-produto > div:last-child').before('<div class="theme-productSizesAtList"></div>');
@@ -863,7 +864,20 @@ theme.functions.placeSizeAtList = function(oObj, info){
 
     }
 
-theme.functions.createProductShelf = function(categoria, elementosPais) {    
+    theme.functions.getProductData = function(productId){
+        return fetch(`/_search?filters=product_ids:${productId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erro na resposta da API: ' + response.status);
+                }
+                return response.json();
+            })
+            
+            .catch(error => {
+                console.error('Erro ao buscar produto:', error);
+            });
+    }
+    theme.functions.createProductShelf = function(categoria, elementosPais) {    
     fetch(`/_search?an=${categoria}&filter=is_active:true;is_searchable:true`)
     .then(response => {
         if (!response.ok) {
@@ -1004,18 +1018,20 @@ theme.functions.productListActions = function(){
             observerListItem.observe(this);
         });
     }
-    $('.listagem-item').each(function(){
+    if(theme.settings.showButtonsAtList == true){
+        $('.listagem-item').each(function(){
 
-        let hasVariants = $(this).find('.botao-comprar-ajax').length > 0 ? true : false;
-        let id = $(this).attr('class').split(' ')[1].replace('prod-id-','').trim();
-        let url = $(this).find('.info-produto > a:first-child').attr('href');        
-        let block = $('<div id="theme_list-functions"></div>');
-        if(hasVariants){
-            block.append($('<a href="/carrinho/produto/'+ id +'/adicionar" class="theme_buttonBuy-ajax">'+ theme.icon.cart +'<span>'+ theme.lang.productListAdd +'</span></a>'));
-        }        
-        block.append($('<a href="'+ url +'">'+ theme.icon.seeMore +'<span>'+ theme.lang.productListDetail +'</span></a>'));
-        $(this).find('.imagem-produto').prepend(block);        
-    });
+            let hasVariants = $(this).find('.botao-comprar-ajax').length > 0 ? true : false;
+            let id = $(this).attr('class').split(' ')[1].replace('prod-id-','').trim();
+            let url = $(this).find('.info-produto > a:first-child').attr('href');        
+            let block = $('<div id="theme_list-functions"></div>');
+            if(hasVariants){
+                block.append($('<a href="/carrinho/produto/'+ id +'/adicionar" class="theme_buttonBuy-ajax">'+ theme.icon.cart +'<span>'+ theme.lang.productListAdd +'</span></a>'));
+            }        
+            block.append($('<a href="'+ url +'">'+ theme.icon.seeMore +'<span>'+ theme.lang.productListDetail +'</span></a>'));
+            $(this).find('.imagem-produto').prepend(block);        
+        });
+    }
     $('.listagem-item .acoes-produto, .listagem-item .acoes-produto-responsiva').remove();    
 }
 theme.functions.sideCartScroll = function(){
@@ -1204,7 +1220,7 @@ theme.functions['pagina-categoria'] = function(){
 
     let category_description = ""
     if($('h4.titulo .icon-file-text').length > 0){
-        category_description = $('h4.titulo .icon-file-text').closest('div').find('p').html()
+        category_description = $('h4.titulo .icon-file-text').closest('div').find('p').html().trim()
     }
 
     if($('.secao-principal > .coluna').length){
@@ -1224,7 +1240,7 @@ theme.functions['pagina-categoria'] = function(){
     $('.ordenar-listagem').remove();
     
     if($('.listagem-item').length > 1 ||  $('#theme_filter li.active').length > 0){
-        $('<button type="button" class="filter-trigger btn-icon">'+ theme.icon.filter +'<span>Filtrar Resultados</span></button>').appendTo('#theme_listing-filters');        
+        $('<button type="button" class="filter-trigger btn-icon">'+ theme.icon.filter +'<span>Exibir Filtros</span></button>').appendTo('#theme_listing-filters');        
     }else{
         $('#theme_listing-filters > a:last-child').css('margin-right','0');
     }
@@ -1485,6 +1501,28 @@ theme.worker.run = function(){
         })
     });
 };
+
+theme.worker.benefitsStripe = {};
+theme.worker.benefitsStripe.list = [];
+theme.worker.benefitsStripe.config = {imageAbove:false, showOn:".pagina-inicial", insertAt:".secao-banners .banner.cheio", insertMethod:"after"};
+theme.worker.benefitsStripe.run = function(el){   
+    $(theme.worker.benefitsStripe.config.insertAt)[theme.worker.benefitsStripe.config.insertMethod]('<div class="theme_benefitsStripe"></div>');
+    $.each(theme.worker.benefitsStripe.list, function(key, item){
+        let block = $('<div class="item"></div>');
+        if(item.img){ block.append('<img src="'+ item.img +'"/>') }
+        block.append('<div class="text"></div>');
+        if(item.title){ block.find('.text').append('<strong>'+ item.title +'</strong>') }
+        if(item.subtitle){ block.find('.text').append('<p>'+ item.subtitle +'</p>') }            
+        if(item.link){ block.wrapInner('<a href="'+ item.link +'"></a>') }
+        block.appendTo('.theme_benefitsStripe');
+    });
+    if(theme.benefitsStripe.config.imageAbove){
+        $('.theme_benefitsStripe').addClass('imageAbove');
+    }
+    $('.theme_benefitsStripe').slick(theme.settings.sliders.benefitsStripe);
+
+    console.log(`theme.worker.benefitsStripe OK`);
+};
 theme.worker.mobileFullbanner = {};
 theme.worker.mobileFullbanner.list = [];
 theme.worker.mobileFullbanner.run = function(el){    
@@ -1684,6 +1722,7 @@ theme.worker.insertVideos.run = function(){
 
 $(document).ready(function(){
     theme.worker.topbarSlider.match = theme.worker.topbarSlider.list.length > 0;
+    theme.worker.benefitsStripe.match = theme.worker.benefitsStripe.list.length > 0;
     theme.worker.insertBanners.match = $('.pagina-inicial').length == 1;
     theme.worker.insertVideos.match = $('.pagina-inicial').length == 1;
     theme.worker.floatingWhatsapp.match = theme.settings.whatsappButton;
@@ -1708,23 +1747,6 @@ $(document).ready(function(){
     $('#theme_footer-content1 > ul > li > a:contains(Ocultar)').closest('li').prev('li').nextAll().remove();
     
 
-    //theme.benefitsStripe
-    if(theme.benefitsStripe.active == true && theme.benefitsStripe.list.length > 0 && $('.pagina-inicial').length > 0){
-        $('.secao-banners .banner.cheio').after('<div class="theme_benefitsStripe"></div>');
-        $.each(theme.benefitsStripe.list, function(key, item){
-            let block = $('<div class="item"></div>');
-            if(item.img){ block.append('<img src="'+ item.img +'"/>') }
-            block.append('<div class="text"></div>');
-            if(item.title){ block.find('.text').append('<strong>'+ item.title +'</strong>') }
-            if(item.subtitle){ block.find('.text').append('<p>'+ item.subtitle +'</p>') }            
-            if(item.link){ block.wrapInner('<a href="'+ item.link +'"></a>') }
-            block.appendTo('.theme_benefitsStripe');
-        });
-        if(theme.benefitsStripe.config.imageAbove){
-            $('.theme_benefitsStripe').addClass('imageAbove');
-        }
-        $('.theme_benefitsStripe').slick(theme.settings.sliders.benefitsStripe);
-    }
 
     
 
@@ -1736,11 +1758,13 @@ $(document).ready(function(){
         }
     });
 
+   
     
 });
 $(window).load(function(){
     theme.functions.productListImageSize(theme.settings.imageSize);
 });
+
 
 theme.functions.triggerCDN();
 
