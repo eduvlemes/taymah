@@ -735,4 +735,13 @@ background: var(--c4);
     border-radius: 0!important;
     background: var(--c1);
     font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+#apx_sideLogin button:before{
+    content:"";
+    background-image: url(https://cdn.jsdelivr.net/gh/eduvlemes/taymah/assets/tay_login.svg);
+    height: 24px;
+    width: 24px;
 }
