@@ -702,3 +702,8 @@ background: var(--c4);
 @media(min-width:990px){
 
 }
+
+.excluir.icon-trash{
+    background-image: url(https://cdn.jsdelivr.net/gh/eduvlemes/taymah@main/icons/tay_trash.svg);
+}
+.excluir.icon-trash:before{display:none}
