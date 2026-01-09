@@ -465,7 +465,7 @@ theme.build.account = function(template){
     }else{
         //menu.append('<li><a href="">Login</a></li>');
         menu.append('<li><form id="apx_sideLogin" action="/conta/login" method="post"><label>E-mail<input id="id_email" maxlength="128" name="email" type="text"></label><label>Senha<input id="id_senha" maxlength="32" name="senha" type="password"></label><div><button type="submit" class="botao principal">Entrar</button><button id="recoverPassword" data-toggle="modal"> <i class="icon-lock cor-secundaria"></i> Esqueceu a senha? </button></div></form></li>');
-        menu.append('<li><a href="/conta/criar?next=conta_index&email=_">Cliente novo? Cadastre-se</a></li>');
+        menu.append('<li><a href="/conta/criar?next=conta_index&email=_"><span>Cliente novo? <b>Cadastre-se</b></span></a></li>');
     }
     menu.append('<li class="divider"></li>');
     //menu.append('<li><a href="">Preciso de ajuda</a></li>');

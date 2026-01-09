@@ -715,6 +715,10 @@ background: var(--c4);
 
 #apx_sideLogin{
     background: #fff;
+    border-bottom: 1px solid #f2f2f2;
+    padding: 0;
+    margin: 1rem 0 0 0;
+    box-sizing: border-box;
 }
 #apx_sideLogin label{
     font-size: 16px;
@@ -722,26 +726,82 @@ background: var(--c4);
     text-transform: initial;
 }
 #apx_sideLogin input{
-    background: #f2f2f2;
-    border-radius: 0!important;
-    border: 0!important;
+    background: #f8f8f8;
+    border-radius: 0 !important;
+    font-size: 16px;
+    height: 42px;
 }
-
-#apx_sideLogin button{font-size: 20px;
+#apx_sideLogin label:not(:first-child){
+    margin-top: 1.25rem;
+    margin-bottom: 1.25rem;
+}
+#apx_sideLogin button.principal{font-size: 20px;
+    font-size: 20px;
     text-transform: initial;
     height: 55px;
     line-height: 55px !important;
     box-sizing: border-box;
-    border-radius: 0!important;
+    border-radius: 0 !important;
     background: var(--c1);
-    font-weight: bold;
+    font-weight: 500;
     display: flex;
     align-items: center;
     gap: .5rem;
+    justify-content: center;
+    text-shadow: 0px 0px 0px;
 }
-#apx_sideLogin button:before{
+#apx_sideLogin button.principal:before{
     content:"";
     background-image: url(https://cdn.jsdelivr.net/gh/eduvlemes/taymah/assets/tay_login-arrow.svg);
     height: 24px;
     width: 24px;
+}
+#apx_sideLogin button#recoverPassword{
+    font-size: 14px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--c4);
+    gap: .5rem;
+    margin: 1.25rem auto;
+}
+#apx_sideLogin button#recoverPassword i{display:none}
+#apx_sideLogin button#recoverPassword:before{
+    content: "";
+    height: 20px;
+    width: 20px;
+    background-image:url(https://cdn.jsdelivr.net/gh/eduvlemes/taymah/assets/tay_secure.svg);
+    display: inline-block;
+}
+
+#theme_account > ul > li.divider{
+    margin-left: 0;
+    margin-right: 0;
+}
+#theme_account > ul > li > a{
+    background: #f2f2f2;
+    height: 50px;
+    box-sizing: border-box;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: normal;
+    text-transform: initial;
+    font-size: 16px;
+    margin:1rem 0;
+    gap:.5rem;
+}
+#theme_account > ul > li > a[href^="/conta/criar"]:before{
+        content: "";
+    height: 20px;
+    width: 20px;
+    background-image:url(https://cdn.jsdelivr.net/gh/eduvlemes/taymah/assets/tay_register.svg);
+    display: inline-block;
+}
+.theme_aside #theme_search form{}
+.theme_aside #theme_search input{
+background: transparent;
+border: 0;;
 }
