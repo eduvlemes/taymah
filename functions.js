@@ -8,6 +8,7 @@ theme.info.ref = "https://www.alpix.dev/criar-sua-loja-integrada";
 theme.isMobile = window.innerWidth < 990;
 
 theme.lang = {};
+theme.lang.sideCartUpsellTitle = "Leve também"
 theme.lang.productListDetail = "Ver Mais";
 theme.lang.productListAdd = "Comprar Agora";
 theme.lang.sideCartTitle = "Meu Carrinho";
@@ -486,6 +487,8 @@ theme.build.account = function(template){
 
 
 theme.functions = [];
+
+
 theme.functions.triggerCDN = function(){
     theme.isLogged = $.cookie('LI-UserData') && !JSON.parse($.cookie('LI-UserData')).logged ? false : true;
     sessionStorage.setItem('cdnTriggered',true)
@@ -1036,7 +1039,11 @@ theme.functions.productListActions = function(){
 }
 theme.functions.sideCartScroll = function(){
     if($("#theme_sideCart-content .scroll").length){
-        let h = $('#theme_sideCart-header').innerHeight() + $('#theme_sideCart-content .table-footer').innerHeight() + $('#theme_sideCart-footer').innerHeight();
+        let h = $('#theme_sideCart-header').innerHeight() + $('#theme_sideCart-footer').innerHeight()
+        $(`#theme_sideCart-content .scroll ~ *`).each(function(){
+            h += $(this).innerHeight();
+        })
+         
         let maxheight = $('#theme_sideCart').innerHeight();
         $('#theme_sideCart-content .scroll').css('height','calc('+ maxheight +'px - ' + h + 'px');
     }
@@ -1082,9 +1089,7 @@ theme.functions.sideCartActions = function(html){
                         name: "remove_from_cart",
                         data: D
                     }), $(document).trigger("li_remove_from_cart", [x, D]));
-                    $("#theme_sideCart-content").load("/carrinho/mini", function() {
-                        theme.functions.sideCart()
-                    })
+                    theme.functions.sideCartLoadContent();
                 }
             }).fail(function(q) {
                 window.location = o
@@ -1096,9 +1101,7 @@ theme.functions.sideCartActions = function(html){
     $('#theme_header-functions > li > .carrinho > a').click(function(e){
         e.preventDefault();
         if($('#theme_sideCart #theme_sideCart-content').is(':empty')){
-            $("#theme_sideCart-content").load("/carrinho/mini", function() {
-                theme.functions.sideCart()
-            })
+            theme.functions.sideCartLoadContent();
         }else{
             theme.functions.sideCartToggle();
         }
@@ -1135,6 +1138,300 @@ theme.functions.sideCartActions = function(html){
         $(this).next('.controls').toggle();
         theme.functions.sideCartScroll();
     });
+}
+
+theme.functions.sideCartUpsell = {}
+theme.functions.sideCartUpsell.products = [];
+
+// Função genérica para abrir popup de variações de produto
+theme.functions.openVariationPopup = async function(productId) {
+    const productData = await theme.functions.getProductData(productId);
+    if(!productData || !productData.products || !productData.products[0]) {
+        console.error('Produto não encontrado');
+        return;
+    }
+    
+    const product = productData.products[0];
+    
+    // Criar estrutura do popup
+    let popupHtml = `
+        <div id="theme_variationPopup" class="theme_popup">
+            <div class="theme_popup-overlay"></div>
+            <div class="theme_popup-content">
+                <button class="theme_popup-close" onclick="theme.functions.closeVariationPopup()">${theme.icon.close || '×'}</button>
+                <h3 class="theme_popup-title">${product.name}</h3>
+                <div class="theme_popup-body">
+                    <div class="theme_popup-image">
+                        <img src="https://cdn.awsli.com.br/600x600${product.images[0].path}" alt="${product.name}" />
+                    </div>
+                    <div class="theme_popup-variations">
+                        <div class="theme_popup-options"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Remover popup anterior se existir
+    $('#theme_variationPopup').remove();
+    
+    // Adicionar popup ao body
+    $('body').append(popupHtml);
+    
+    // Construir opções de variação
+    let optionsHtml = '';
+    product.options.forEach(option => {
+        optionsHtml += `<div class="theme_popup-option">`;
+        optionsHtml += `<label>${option.option.display_name}:</label>`;
+        optionsHtml += `<div class="theme_popup-option-values">`;
+        
+        option.values.forEach(value => {
+            if(option.option.display_name.toLowerCase().includes('cor') && value.swatch && value.swatch.color) {
+                // Se for cor e tiver swatch, mostrar como cor
+                optionsHtml += `<button class="theme_popup-option-value color-option" data-option-id="${option.option.id}" data-value-id="${value.id}" style="background-color: ${value.swatch.color.primary};" title="${value.name}"></button>`;
+            } else {
+                // Outros tipos de variação (tamanho, etc)
+                optionsHtml += `<button class="theme_popup-option-value" data-option-id="${option.option.id}" data-value-id="${value.id}">${value.name}</button>`;
+            }
+        });
+        
+        optionsHtml += `</div></div>`;
+    });
+    
+    // Adicionar estrutura de preços
+    let basePrice = parseFloat(product.price.base) || 0;
+    let sellingPrice = parseFloat(product.price.selling) || basePrice;
+    let hasPromo = sellingPrice < basePrice;
+    let installmentValue = (sellingPrice / 12).toFixed(2);
+    
+    optionsHtml += `
+        <div class="theme_popup-pricing">
+            <div class="theme_popup-price">
+                ${hasPromo ? `<s>R$ ${basePrice.toFixed(2).replace('.', ',')}</s>` : ''}
+                <strong>R$ ${sellingPrice.toFixed(2).replace('.', ',')}</strong>
+            </div>
+            <div class="theme_popup-installment">
+                até <strong>12x</strong> de <strong>R$ ${installmentValue.replace('.', ',')}</strong> sem juros
+            </div>
+        </div>
+    `;
+    
+    optionsHtml += `<button class="theme_popup-add-to-cart botao principal" disabled>Adicionar ao Carrinho</button>`;
+    
+    // Inserir o HTML das opções
+    let $popup = $('#theme_variationPopup');
+    $popup.find('.theme_popup-options').html(optionsHtml);
+    
+    // Armazenar dados do produto no popup (após o popup estar no DOM)
+    $popup.attr('data-product', JSON.stringify(product));
+    $popup.attr('data-selectedVariations', JSON.stringify({}));
+    
+    // Inicializar disponibilidade das opções
+    updateAvailableOptions(product, {});
+    
+    // Evento de seleção de variação
+    $(document).on('click', '#theme_variationPopup .theme_popup-option-value', function(e) {
+        e.preventDefault();
+        let $this = $(this);
+        let optionId = $this.data('option-id');
+        let valueId = $this.data('value-id');
+        
+        // Remover seleção anterior da mesma opção
+        $this.siblings('.selected').removeClass('selected');
+        $this.addClass('selected');
+        
+        // Armazenar seleção
+        let $popup = $('#theme_variationPopup');
+        let selectedVariations = JSON.parse($popup.attr('data-selectedVariations') || '{}');
+        selectedVariations[String(optionId)] = String(valueId);
+        $popup.attr('data-selectedVariations', JSON.stringify(selectedVariations));
+        
+        // Atualizar disponibilidade das outras opções
+        let product = JSON.parse($popup.attr('data-product'));
+        updateAvailableOptions(product, selectedVariations);
+        
+        // Verificar se todas as opções foram selecionadas
+        if(Object.keys(selectedVariations).length === product.options.length) {
+            // Buscar SKU correspondente
+            let matchingSku = product.skus.find(sku => {
+                return sku.variations.every(variation => {
+                    return String(selectedVariations[variation.option.id]) === String(variation.value.id);
+                });
+            });
+            
+            // Verificar se tem estoque disponível
+            if(matchingSku && matchingSku.available && matchingSku.inventory && matchingSku.inventory.available_quantity > 0) {
+                // Atualizar preços com os valores do SKU selecionado
+                let skuBasePrice = parseFloat(matchingSku.price.base) || 0;
+                let skuSellingPrice = parseFloat(matchingSku.price.selling) || skuBasePrice;
+                let skuHasPromo = skuSellingPrice < skuBasePrice;
+                let skuInstallmentValue = (skuSellingPrice / 12).toFixed(2);
+                
+                let priceHtml = `
+                    <div class="theme_popup-price">
+                        ${skuHasPromo ? `<s>R$ ${skuBasePrice.toFixed(2).replace('.', ',')}</s>` : ''}
+                        <strong>R$ ${skuSellingPrice.toFixed(2).replace('.', ',')}</strong>
+                    </div>
+                    <div class="theme_popup-installment">
+                        até <strong>12x</strong> de <strong>R$ ${skuInstallmentValue.replace('.', ',')}</strong> sem juros
+                    </div>
+                `;
+                
+                $('#theme_variationPopup .theme_popup-pricing').html(priceHtml);
+                
+                $('#theme_variationPopup .theme_popup-add-to-cart')
+                    .prop('disabled', false)
+                    .attr('data-sku-id', matchingSku.id);
+            } else {
+                $('#theme_variationPopup .theme_popup-add-to-cart')
+                    .prop('disabled', true)
+                    .removeAttr('data-sku-id');
+            }
+        } else {
+            $('#theme_variationPopup .theme_popup-add-to-cart').prop('disabled', true);
+        }
+    });
+    
+    // Função para atualizar disponibilidade das opções
+    function updateAvailableOptions(product, selectedVariations) {
+        // Remover todas as marcações de indisponível
+        $('#theme_variationPopup .theme_popup-option-value').removeClass('unavailable');
+        
+        // Se não há seleções, verificar disponibilidade geral de cada opção
+        if(Object.keys(selectedVariations).length === 0) {
+            product.options.forEach(option => {
+                option.values.forEach(value => {
+                    let hasAvailableSku = product.skus.some(sku => {
+                        return sku.available && 
+                               sku.inventory && 
+                               sku.inventory.available_quantity > 0 &&
+                               sku.variations.some(v => 
+                                   String(v.option.id) === String(option.option.id) && 
+                                   String(v.value.id) === String(value.id)
+                               );
+                    });
+                    
+                    if(!hasAvailableSku) {
+                        $(`#theme_variationPopup .theme_popup-option-value[data-option-id="${option.option.id}"][data-value-id="${value.id}"]`).addClass('unavailable');
+                    }
+                });
+            });
+            return;
+        }
+        
+        // Para cada opção, verificar se há SKUs disponíveis
+        product.options.forEach(option => {
+            option.values.forEach(value => {
+                // Criar uma variação temporária incluindo este valor
+                let tempVariations = {...selectedVariations};
+                tempVariations[String(option.option.id)] = String(value.id);
+                
+                // Verificar se existe algum SKU disponível com esta combinação
+                let hasAvailableSku = product.skus.some(sku => {
+                    // Verificar se o SKU tem estoque
+                    if(!sku.available || !sku.inventory || sku.inventory.available_quantity <= 0) {
+                        return false;
+                    }
+                    
+                    // Verificar se o SKU corresponde a todas as variações (incluindo a temporária)
+                    let matchesAll = Object.keys(tempVariations).every(tempOptionId => {
+                        return sku.variations.some(v => 
+                            String(v.option.id) === String(tempOptionId) && 
+                            String(v.value.id) === String(tempVariations[tempOptionId])
+                        );
+                    });
+                    
+                    return matchesAll;
+                });
+                
+                // Se não há SKU disponível, marcar como indisponível
+                if(!hasAvailableSku) {
+                    $(`#theme_variationPopup .theme_popup-option-value[data-option-id="${option.option.id}"][data-value-id="${value.id}"]`).addClass('unavailable');
+                }
+            });
+        });
+    }
+    
+    // Evento de adicionar ao carrinho
+    $(document).on('click', '#theme_variationPopup .theme_popup-add-to-cart', function(e) {
+        e.preventDefault();
+        let skuId = $(this).attr('data-sku-id');
+        if(skuId) {
+            window.location.href = `/carrinho/produto/${skuId}`;
+        }
+    });
+    
+    // Mostrar popup
+    $('body').addClass('popup-visible');
+};
+
+theme.functions.closeVariationPopup = function() {
+    $('#theme_variationPopup').remove();
+    $('body').removeClass('popup-visible');
+    $(document).off('click', '#theme_variationPopup .theme_popup-option-value');
+    $(document).off('click', '#theme_variationPopup .theme_popup-add-to-cart');
+};
+
+theme.functions.sideCartUpsell.run = async function(){
+    console.log(`Running sideCartUpsell with products:`, theme.functions.sideCartUpsell.products);
+    const products = await theme.functions.getProductData(theme.functions.sideCartUpsell.products.join(','));
+    if(products && products.products && products.products.length > 0){
+        let upsellContainer = $('#theme_sideCart .theme_sideCart-upsell');
+        upsellContainer.empty();
+        upsellContainer.append(`<div class="theme_aside-header" ><span>${theme.lang.sideCartUpsellTitle}</span></div>`);
+        let upsellList = $('<ul class="theme_sideCart-upsell-list"></ul>');
+        products.products.forEach(product => {
+            // Calcular preços
+            let basePrice = parseFloat(product.price.base) || 0;
+            let sellingPrice = parseFloat(product.price.selling) || basePrice;
+            console.log(basePrice, sellingPrice);
+            let hasPromo = sellingPrice < basePrice;
+            let installmentValue = (sellingPrice / 12).toFixed(2);
+            
+            let listItem = $(`
+                <li class="theme_sideCart-upsell-item" data-product-id="${product.id}">
+                    <a href="${product.url}">
+                        <div class="theme_sideCart-upsell-image">
+                            <img src="https://cdn.awsli.com.br/400x400${product.preview_images[0]}" alt="${product.name}" />
+                        </div>
+                        <div class="theme_sideCart-upsell-info">
+                            <span class="theme_sideCart-upsell-name">${product.name}</span>
+                            <div class="theme_sideCart-upsell-price">
+                                ${hasPromo ? `<s>R$ ${basePrice.toFixed(2).replace('.', ',')}</s>` : ''}
+                                <strong>R$ ${sellingPrice.toFixed(2).replace('.', ',')}</strong>
+                            </div>
+                            <div class="theme_sideCart-upsell-installment">
+                                até <strong>12x</strong> de <strong>R$ ${installmentValue.replace('.', ',')}</strong> sem juros
+                            </div>
+                        </div>
+                    </a>
+                    <button class="theme_sideCart-upsell-button " data-product-id="${product.id}" data-skus-count="${product.skus.length}" data-sku-id="${product.skus[0].id}">Adicionar</button>
+                </li>
+            `);
+            upsellList.append(listItem);
+        });
+        upsellContainer.append(upsellList);
+        
+        // Evento de clique no botão de adicionar
+        $(document).on('click', '.theme_sideCart-upsell-button', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            let $button = $(this);
+            let productId = $button.data('product-id');
+            let skusCount = $button.data('skus-count');
+            let skuId = $button.data('sku-id');
+            
+            if(skusCount === 1) {
+                // Se tiver apenas 1 SKU, adicionar direto ao carrinho
+                window.location.href = `/carrinho/produto/${skuId}`;
+            } else {
+                // Se tiver mais de 1 SKU, abrir popup de variações
+                console.log(`aa`)
+                theme.functions.openVariationPopup(productId);
+            }
+        });
+    }
 }
 theme.functions.sideCartSet = function(){
     $(document).on("click", ".theme_buttonBuy-ajax", function(o) {
@@ -1177,18 +1474,110 @@ theme.functions.sideCartSet = function(){
         })
     });
     
-    $('body').append('<div id="theme_sideCart" class="theme_aside right"><div class="theme_aside-header" id="theme_sideCart-header"><button type="button" onclick="theme.functions.sideCartToggle()">'+ theme.icon.sideCartClose +'</button><span>'+ theme.lang.sideCartTitle +'</span></div><div id="theme_sideCart-content"></div><div id="theme_sideCart-footer"><a href="/carrinho/index" class="botao principal botao-comprar">Finalizar Compra</div></div></div>');    
+    $('body').append('<div id="theme_sideCart" class="theme_aside right"><div class="theme_sideCart-upsell"></div><div class="theme_aside-header" id="theme_sideCart-header"><button type="button" onclick="theme.functions.sideCartToggle()">'+ theme.icon.sideCartClose +'</button><span>'+ theme.lang.sideCartTitle +'</span></div><div id="theme_sideCart-content"></div><div id="theme_sideCart-footer"><a href="/carrinho/index" class="botao principal botao-comprar">Finalizar Compra</a><button type="button" class="theme_sideCart-continueBuy" onclick="theme.functions.sideCartToggle()">Continuar Comprando</button></div></div></div>');   
+    
+    
 }
 theme.functions.sideCart = function(){
     $('body').addClass('sideCart-visible');  
     theme.functions.sideCartScroll();  
 }
-
+theme.functions.sideCartLoadContent = function(){
+     $("#theme_sideCart-content").load("/carrinho/mini", function(response) {   
+        
+        $(`#theme_sideCart-content img`).each(function(){
+                let src = $(this).attr(`src`).replace(`64x64`,`200x200`);
+                $(this).attr(`src`,src)
+            })
+            let subtotal = parseFloat($('#theme_sideCart-content [data-subtotal-valor]').attr('data-subtotal-valor'));
+            
+            // Criar estrutura de cupom/vale com toggle
+            let cupomHtml = `
+                <div class="apx-sideFunction cupom">
+                    <button type="button" class="cupom-toggle">
+                        <span>ADICIONAR CUPOM/VALE</span>
+                        <svg class="cupom-toggle-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                    </button>
+                    <form action="/carrinho/cupom/validar" method="post" class="cupom-form" style="display: none;">
+                        <div class="cupom-form-content">
+                            <input type="text" placeholder="Digite o código do cupom..." name="cupom"/>
+                            <button type="submit">Aplicar</button>
+                        </div>
+                    </form>
+                </div>
+            `;
+            
+            $(cupomHtml).insertBefore('#theme_sideCart-content .table-footer');
+            
+            // Evento de toggle do cupom
+            $('.cupom-toggle').click(function() {
+                $(this).toggleClass('active');
+                $('.cupom-form').toggle();
+                theme.functions.sideCartScroll();
+            });
+            
+            $('.cupom form').submit(function(e){
+           e.preventDefault();
+           let cupom = $(this).find('input').val();
+           if(cupom.length  > 3){
+                fetch("/carrinho/cupom/validar", {
+                    "headers": {
+                    "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+                    "accept-language": "en-US,en;q=0.9,pt-BR;q=0.8,pt;q=0.7,es;q=0.6",
+                    "cache-control": "no-cache",
+                    "content-type": "application/x-www-form-urlencoded",
+                    "pragma": "no-cache",
+                    "sec-ch-ua": "\"Chromium\";v=\"118\", \"Google Chrome\";v=\"118\", \"Not=A?Brand\";v=\"99\"",
+                    "sec-ch-ua-mobile": "?0",
+                    "sec-ch-ua-platform": "\"Windows\"",
+                    "sec-fetch-dest": "document",
+                    "sec-fetch-mode": "navigate",
+                    "sec-fetch-site": "same-origin",
+                    "sec-fetch-user": "?1",
+                    "upgrade-insecure-requests": "1"
+                    },
+                    "referrer": "/carrinho/index",
+                    "referrerPolicy": "strict-origin-when-cross-origin",
+                    "body": "cupom="+cupom,
+                    "method": "POST",
+                    "mode": "cors",
+                    "credentials": "include"
+                }).then(response => {
+                    apx_widgets.worker.sideCartPro.functions.sideCartLoadContent();
+                }); 
+            }else{
+                alert('Digite o código do cupom e tente novamente.');
+            }
+        });
+        
+        theme.functions.sideCart();
+       
+        let cartProductIds = [];
+        $(response).find('tr[data-produto-id]').each(function() {
+            let productId = $(this).attr('data-produto-id');
+            if(productId) {
+                cartProductIds.push(parseInt(productId));
+            }
+        });
+       
+        if(theme.functions.sideCartUpsell.products && theme.functions.sideCartUpsell.products.length > 0) {
+            theme.functions.sideCartUpsell.products = theme.functions.sideCartUpsell.products.filter(function(productId) {
+                return !cartProductIds.includes(productId);
+            });
+            
+           
+            if(theme.functions.sideCartUpsell.products.length > 0) {
+                theme.functions.sideCartUpsell.run();
+            }
+        }
+    })
+}
 theme.functions.sideCartToggle = function(){
     if($('#theme_sideCart-content:empty').length){
-        $("#theme_sideCart-content").load("/carrinho/mini", function() {
-            theme.functions.sideCart()
-        })
+        theme.functions.sideCartLoadContent();
     }
     $('body').toggleClass('sideCart-visible');
 }
