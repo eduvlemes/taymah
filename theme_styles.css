@@ -741,7 +741,7 @@ background: var(--c4);
 }
 #apx_sideLogin button:before{
     content:"";
-    background-image: url(https://cdn.jsdelivr.net/gh/eduvlemes/taymah/assets/tay_login.svg);
+    background-image: url(https://cdn.jsdelivr.net/gh/eduvlemes/taymah/assets/tay_login-arrow.svg);
     height: 24px;
     width: 24px;
 }
