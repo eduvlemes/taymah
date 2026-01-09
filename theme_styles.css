@@ -628,7 +628,10 @@ background: var(--c4);
     font-size: 12px;
 }
 .theme_sideCart-upsell-price{}
-#theme_sideCart{width: 440px;right: -440px;}
+
+#theme_sideCart,
+.theme_aside{width: 440px;right: -440px;}
+.theme_aside.left{left:-440px}
 .sideCart-visible .theme_sideCart-upsell{right: 440px;opacity:1}
 .theme_sideCart-upsell{opacity:0;right: -250px;transition:all .5s ease-in-out}
 
@@ -703,7 +706,33 @@ background: var(--c4);
 
 }
 
-.excluir.icon-trash{
-    background-image: url(https://cdn.jsdelivr.net/gh/eduvlemes/taymah@main/icons/tay_trash.svg);
+.excluir .icon-trash{
+    background-image: url(https://cdn.jsdelivr.net/gh/eduvlemes/taymah/assets/tay_trash.svg);
+    height: 16px;
+    width: 16px;
 }
-.excluir.icon-trash:before{display:none}
+.excluir .icon-trash:before{display:none}
+
+#apx_sideLogin{
+    background: #fff;
+}
+#apx_sideLogin label{
+    font-size: 16px;
+    font-weight: normal;
+    text-transform: initial;
+}
+#apx_sideLogin input{
+    background: #f2f2f2;
+    border-radius: 0!important;
+    border: 0!important;
+}
+
+#apx_sideLogin button{font-size: 20px;
+    text-transform: initial;
+    height: 55px;
+    line-height: 55px !important;
+    box-sizing: border-box;
+    border-radius: 0!important;
+    background: var(--c1);
+    font-weight: bold;
+}
