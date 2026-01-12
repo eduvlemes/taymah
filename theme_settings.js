@@ -27,7 +27,11 @@ theme.icon.filter = `
 </svg>
 `
 
-theme.templates.header = '<div id="theme_header_1"><div class="conteiner-fluid"><div class="row-flex align-items-center"><div class="col-auto" id="theme_header-logo"><button type="button" id="theme_header-menu-trigger"></button></div><div class="col justify-content-center" id="theme_header-menu"></div><div class="col" id="theme_header-functions-block"><ul id="theme_header-functions"></ul></div></div></div></div>';
+theme.templates.header = `<div id="theme_header_1"><div class="conteiner-fluid"><div class="row-flex align-items-center"><div class="visible-phone col"><button type="button" id="theme_header-menu-trigger">
+<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M15.75 9C15.75 9.14918 15.6907 9.29226 15.5852 9.39775C15.4798 9.50324 15.3367 9.5625 15.1875 9.5625H2.8125C2.66332 9.5625 2.52024 9.50324 2.41475 9.39775C2.30926 9.29226 2.25 9.14918 2.25 9C2.25 8.85082 2.30926 8.70774 2.41475 8.60225C2.52024 8.49676 2.66332 8.4375 2.8125 8.4375H15.1875C15.3367 8.4375 15.4798 8.49676 15.5852 8.60225C15.6907 8.70774 15.75 8.85082 15.75 9ZM2.8125 5.0625H15.1875C15.3367 5.0625 15.4798 5.00324 15.5852 4.89775C15.6907 4.79226 15.75 4.64918 15.75 4.5C15.75 4.35082 15.6907 4.20774 15.5852 4.10225C15.4798 3.99676 15.3367 3.9375 15.1875 3.9375H2.8125C2.66332 3.9375 2.52024 3.99676 2.41475 4.10225C2.30926 4.20774 2.25 4.35082 2.25 4.5C2.25 4.64918 2.30926 4.79226 2.41475 4.89775C2.52024 5.00324 2.66332 5.0625 2.8125 5.0625ZM9.5625 12.9375H2.8125C2.66332 12.9375 2.52024 12.9968 2.41475 13.1023C2.30926 13.2077 2.25 13.3508 2.25 13.5C2.25 13.6492 2.30926 13.7923 2.41475 13.8977C2.52024 14.0032 2.66332 14.0625 2.8125 14.0625H9.5625C9.71168 14.0625 9.85476 14.0032 9.96025 13.8977C10.0657 13.7923 10.125 13.6492 10.125 13.5C10.125 13.3508 10.0657 13.2077 9.96025 13.1023C9.85476 12.9968 9.71168 12.9375 9.5625 12.9375Z" fill="#3F3C3C"/>
+</svg>
+</button></div><div class="col-auto" id="theme_header-logo"></div><div class="col justify-content-center" id="theme_header-menu"></div><div class="col" id="theme_header-functions-block"><ul id="theme_header-functions"></ul></div></div></div></div>`;
 
 theme.worker.topbarSlider.config.backgroundColor = "#3F3C3C";
 theme.worker.topbarSlider.config.textColor = "#fff";
@@ -207,8 +211,42 @@ $(document).ready(function(){
             }
         });
     }
+    theme.functions.asideMenuFunctions();
 });
+theme.asideFunctions = [
+    {
+        icon:``,
+        url: ``,
+        text:`Rastreie seu Pedido`,
+    },
+    {
+        icon:``,
+        url: ``,
+        text:`Central de Trocas`,
+    },
+    {
+        icon:``,
+        url: ``,
+        text:`Minha Conta`,
+    },
+    {
+        icon:``,
+        url: ``,
+        text:`Fale Conosco`,
+    },
+]
+theme.functions.asideMenuFunctions = function(){
+    $(`#theme_menu-aside .menu.superior`).append(`<ul class="theme_aside-menu-functions"></ul>`);
+    $.each(theme.asideFunctions, function(index, item){
+        $(`#theme_menu-aside .theme_aside-menu-functions`).append(`<li>
+            <a href="${item.url}">
+                ${item.icon ? `<span class="icon">${item.icon}</span>` : ''}
+                <span class="text">${item.text}</span>
+            </a>
+        </li>`);
 
+    });
+};
 theme.functions.sideCartUpsell.products = [384705751];
 theme.functions.externalPrice = function(){
     if(!$('.pagina-produto .acoes-produto').length) return;

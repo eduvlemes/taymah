@@ -493,8 +493,123 @@ theme.build.account = function(template){
 
 
 theme.functions = [];
+theme.functions.getMiniCartData = function(){
+    return $.get(`/carrinho/minicart`);
+}
+theme.functions.checkoutProductImage = async function(){
+    try {
+        let cart = await theme.functions.getMiniCartData();
+        cart = cart.carrinho ? cart.carrinho : false;
+        console.log(cart)
+        if (!cart || !cart.items) return;
+        console.log(`aaa`)
+        // Para cada produto no carrinho, inserir a imagem
+        cart.items.forEach(product => {
+            const td = document.querySelector(`td[data-produto-id="${product.id}"]`);
+            if (td && product.images && product.images.length > 0) {
+                // Verificar se já existe uma imagem
+                if (!td.querySelector('img')) {
+                    const produtoInfo = td.querySelector('.produto-info');
+                    if (produtoInfo) {
+                        // Buscar a imagem principal
+                        const principalImage = product.images.find(img => img.principal === true);
+                        const imagePath = principalImage ? principalImage.path : product.images[0].path;
+                        
+                        const img = document.createElement('img');
+                        img.src = `https://cdn.awsli.com.br/600x600/${imagePath}`;
+                        img.alt = product.name || 'Produto';
+                        img.style.cssText = 'width: 60px; height: auto; border-radius: 4px; margin-right: 12px; float: left;';
+                        produtoInfo.insertBefore(img, produtoInfo.firstChild);
+                    }
+                }
+            }
+        });
 
+        // Remover primeiro td dos totais e adicionar colspan no novo primeiro
+        document.querySelectorAll('.bg-dark.esconder-mobile, .bg-dark.tr-checkout-frete').forEach(row => {
+            const firstTd = row.querySelector('td:first-child');
+            if (firstTd) {
+                firstTd.remove();
+                const newFirstTd = row.querySelector('td:first-child');
+                if (newFirstTd) {
+                    newFirstTd.setAttribute('colspan', '2');
+                }
+            }
+        });
+    } catch (error) {
+        console.error('Erro ao buscar dados do carrinho:', error);
+    }
+}
+theme.functions.checkoutPlaceholders = function(){
+    document.querySelectorAll('.control-group').forEach(group => {
+        const label = group.querySelector('label');
+        const field = group.querySelector('input, select, textarea');
 
+        if (!label || !field) return;
+
+        // Texto limpo do label
+        const labelText = label.textContent.trim();
+
+        // Só adiciona placeholder se não existir
+        if (!field.getAttribute('placeholder')) {
+            field.setAttribute('placeholder', labelText);
+        }
+    });
+
+    document.querySelectorAll('.control-group input, .control-group textarea')
+    .forEach(field => {
+
+        const group = field.closest('.control-group');
+
+        const toggleFilled = () => {
+        if (field.value && field.value.trim() !== '') {
+            group.classList.add('is-filled');
+        } else {
+            group.classList.remove('is-filled');
+        }
+        };
+
+        // Inicial (importante para autofill)
+        toggleFilled();
+
+        field.addEventListener('input', toggleFilled);
+        field.addEventListener('change', toggleFilled);
+        field.addEventListener('blur', toggleFilled);
+        
+        // Detectar autofill do navegador
+        field.addEventListener('animationstart', (e) => {
+            if (e.animationName === 'onAutoFillStart') {
+                toggleFilled();
+            }
+        });
+    });
+
+    // Adicionar is-filled a todos os selects
+    document.querySelectorAll('.control-group select').forEach(select => {
+        const group = select.closest('.control-group');
+        if (group) {
+            group.classList.add('is-filled');
+        }
+    });
+
+    // Verificação periódica para campos preenchidos dinamicamente
+    const checkFilledFields = () => {
+        document.querySelectorAll('.control-group input, .control-group textarea').forEach(field => {
+            const group = field.closest('.control-group');
+            if (field.value && field.value.trim() !== '') {
+                group.classList.add('is-filled');
+            } else {
+                group.classList.remove('is-filled');
+            }
+        });
+    };
+    
+    // Verificar após 100ms, 500ms e 1s (para capturar preenchimentos automáticos)
+    setTimeout(checkFilledFields, 100);
+    setTimeout(checkFilledFields, 500);
+    setTimeout(checkFilledFields, 1000);
+
+}
 theme.functions.triggerCDN = function(){
     theme.isLogged = $.cookie('LI-UserData') && !JSON.parse($.cookie('LI-UserData')).logged ? false : true;
     sessionStorage.setItem('cdnTriggered',true)
@@ -1847,8 +1962,12 @@ theme.functions['pagina-produto'] = function(){
 theme.functions['pagina-carrinho'] = function(){
     if($('.carrinho-checkout').length > 0){
         //$('.tabela-carrinho').insertBefore('#formas-pagamento-wrapper');
-        $('.tabela-carrinho').wrap('<div class="caixa-sombreada theme_order-resume"></div>');
-        $('<legend class="titulo cor-secundaria"><i class="icon-archive"></i>Itens do pedido</legend>').insertBefore('.tabela-carrinho');
+        // $('.tabela-carrinho').wrap('<div class="caixa-sombreada theme_order-resume"></div>');
+        // $('<legend class="titulo cor-secundaria"><i class="icon-archive"></i>Itens do pedido</legend>').insertBefore('.tabela-carrinho');
+
+        $(`#login-content, .checkout-alerta-seguro`).wrapAll(`<div class="caixa-sombreada theme_checkout-login"></div>`);
+        theme.functions.checkoutPlaceholders();
+        theme.functions.checkoutProductImage();
     }
 };
 
@@ -2118,7 +2237,7 @@ theme.worker.insertVideos.run = function(){
 }
 
 $(document).ready(function(){
-    theme.worker.topbarSlider.match = theme.worker.topbarSlider.list.length > 0;
+    theme.worker.topbarSlider.match = theme.worker.topbarSlider.list.length > 0 && $('.pagina-carrinho').length == 0;
     theme.worker.benefitsStripe.match = theme.worker.benefitsStripe.list.length > 0;
     theme.worker.insertBanners.match = $('.pagina-inicial').length == 1;
     theme.worker.insertVideos.match = $('.pagina-inicial').length == 1;

@@ -1,0 +1,226 @@
+/* Layout Checkout - Estilo Shopify */
+.pagina-carrinho.carrinho-checkout .campos-pedido .campos-pedido {
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 40px;
+    align-items: flex-start;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+/* Resumo à direita */
+.pagina-carrinho.carrinho-checkout .campos-pedido .campos-pedido > .row-fluid:first-child {
+    flex: 0 0 450px;
+    max-width: 450px;
+    position: sticky;
+    top: 20px;
+}
+
+/* Formulário à esquerda */
+.pagina-carrinho.carrinho-checkout .campos-pedido .campos-pedido > form {
+    flex: 1;
+    max-width: 100%;
+}
+
+/* Ajustes no resumo */
+.pagina-carrinho.carrinho-checkout .resumo-compra {
+    background: #fafafa;
+    border-radius: 8px;
+    padding: 24px;
+    border: 1px solid #e5e5e5;
+}
+
+/* Remover margin padrão dos spans */
+.pagina-carrinho.carrinho-checkout .campos-pedido .campos-pedido > .row-fluid .span12 {
+    width: 100%;
+    margin: 0;
+}
+
+/* Ajustar largura das colunas do formulário */
+.pagina-carrinho.carrinho-checkout form .row-fluid > .span4 {
+    width: 100%;
+    margin: 0 0 30px 0;
+}
+
+.pagina-carrinho.carrinho-checkout form .row-fluid {
+    display: block;
+    margin-bottom: 0;
+}
+
+/* Campos do formulário */
+.pagina-carrinho.carrinho-checkout .caixa-sombreada {
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+/* Títulos das seções */
+.pagina-carrinho.carrinho-checkout .caixa-sombreada legend {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+/* Tabela de produtos */
+.pagina-carrinho.carrinho-checkout .tabela-carrinho {
+    margin-bottom: 0;
+}
+
+.pagina-carrinho.carrinho-checkout .tabela-carrinho thead {
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.pagina-carrinho.carrinho-checkout .tabela-carrinho thead th {
+    padding: 12px 8px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+.pagina-carrinho.carrinho-checkout .tabela-carrinho tbody tr {
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.pagina-carrinho.carrinho-checkout .tabela-carrinho tbody td {
+    padding: 16px 8px;
+    vertical-align: middle;
+}
+
+/* Totais */
+.pagina-carrinho.carrinho-checkout .tabela-carrinho .bg-dark {
+    background: transparent;
+    font-weight: 500;
+}
+
+.pagina-carrinho.carrinho-checkout .tabela-carrinho .tr-checkout-total td {
+    font-size: 18px;
+    font-weight: 700;
+    padding-top: 20px;
+    border-top: 2px solid #e5e5e5;
+}
+
+/* Botão finalizar */
+.pagina-carrinho.carrinho-checkout .acao-editar {
+    margin-top: 30px;
+}
+
+.pagina-carrinho.carrinho-checkout #finalizarCompra {
+    width: 100%;
+    padding: 18px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 8px;
+}
+
+/* Responsivo */
+@media (max-width: 991px) {
+    .pagina-carrinho.carrinho-checkout .campos-pedido .campos-pedido {
+        flex-direction: column;
+    }
+    
+    .pagina-carrinho.carrinho-checkout .campos-pedido .campos-pedido > .row-fluid:first-child {
+        flex: 1;
+        max-width: 100%;
+        position: relative;
+        order: 2;
+    }
+    
+    .pagina-carrinho.carrinho-checkout .campos-pedido .campos-pedido > form {
+        order: 1;
+    }
+    
+    .pagina-carrinho.carrinho-checkout form .row-fluid > .span4 {
+        width: 100%;
+    }
+}
+
+@media (max-width: 767px) {
+    .pagina-carrinho.carrinho-checkout .campos-pedido .campos-pedido {
+        padding: 20px 10px;
+        gap: 20px;
+    }
+    
+    .pagina-carrinho.carrinho-checkout .caixa-sombreada {
+        padding: 16px;
+    }
+}
+
+/* Ajustes adicionais para campos internos */
+.pagina-carrinho.carrinho-checkout .control-group.span6 {
+    width: 48%;
+    display: inline-block;
+    margin-left: 0 !important;
+    margin-right: 4%;
+    vertical-align: top;
+}
+
+.pagina-carrinho.carrinho-checkout .control-group.span6:nth-child(2n) {
+    margin-right: 0;
+}
+
+.pagina-carrinho.carrinho-checkout .control-group.span12 {
+    width: 100%;
+    margin-left: 0 !important;
+}
+
+/* Formas de pagamento */
+.pagina-carrinho.carrinho-checkout #formasPagamento .accordion-group {
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    transition: all 0.3s ease;
+}
+
+.pagina-carrinho.carrinho-checkout #formasPagamento .accordion-group:hover {
+    border-color: var(--primaryColor);
+}
+
+.pagina-carrinho.carrinho-checkout #formasPagamento .accordion-heading {
+    padding: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Imagens de produtos no resumo */
+.pagina-carrinho.carrinho-checkout .tabela-carrinho img {
+    max-width: 60px;
+    height: auto;
+    border-radius: 4px;
+}
+
+/* Campos de entrada */
+.pagina-carrinho.carrinho-checkout input[type="text"],
+.pagina-carrinho.carrinho-checkout input[type="email"],
+.pagina-carrinho.carrinho-checkout input[type="tel"],
+.pagina-carrinho.carrinho-checkout select {
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-size: 14px;
+    transition: border-color 0.2s ease;
+}
+
+.pagina-carrinho.carrinho-checkout input[type="text"]:focus,
+.pagina-carrinho.carrinho-checkout input[type="email"]:focus,
+.pagina-carrinho.carrinho-checkout input[type="tel"]:focus,
+.pagina-carrinho.carrinho-checkout select:focus {
+    border-color: var(--primaryColor);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+}
+
+/* Labels */
+.pagina-carrinho.carrinho-checkout .control-label {
+    font-weight: 500;
+    margin-bottom: 6px;
+    font-size: 14px;
+    color: #374151;
+}
