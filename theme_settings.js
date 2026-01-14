@@ -215,22 +215,22 @@ $(document).ready(function(){
 });
 theme.asideFunctions = [
     {
-        icon:``,
+        icon:`https://cdn.jsdelivr.net/gh/eduvlemes/taymah/assets/tay_box_menu.svg`,
         url: ``,
         text:`Rastreie seu Pedido`,
     },
     {
-        icon:``,
+        icon:`https://cdn.jsdelivr.net/gh/eduvlemes/taymah/assets/tay_troca_menu.svg`,
         url: ``,
         text:`Central de Trocas`,
     },
     {
-        icon:``,
+        icon:`https://cdn.jsdelivr.net/gh/eduvlemes/taymah/assets/tay_user_menu.svg`,
         url: ``,
         text:`Minha Conta`,
     },
     {
-        icon:``,
+        icon:`https://cdn.jsdelivr.net/gh/eduvlemes/taymah/assets/tay_phone_menu.svg`,
         url: ``,
         text:`Fale Conosco`,
     },
@@ -240,13 +240,25 @@ theme.functions.asideMenuFunctions = function(){
     $.each(theme.asideFunctions, function(index, item){
         $(`#theme_menu-aside .theme_aside-menu-functions`).append(`<li>
             <a href="${item.url}">
-                ${item.icon ? `<span class="icon">${item.icon}</span>` : ''}
+                ${item.icon ? `<img class="icon" src="${item.icon}">` : ''}
                 <span class="text">${item.text}</span>
             </a>
         </li>`);
 
     });
 };
+
+theme.icon.video = `
+<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M12.7602 8.35938L9.01016 5.85938C8.93952 5.81225 8.8574 5.78519 8.77259 5.7811C8.68777 5.77701 8.60343 5.79603 8.52858 5.83614C8.45374 5.87625 8.39119 5.93594 8.34763 6.00884C8.30407 6.08173 8.28112 6.16508 8.28125 6.25V11.25C8.28112 11.3349 8.30407 11.4183 8.34763 11.4912C8.39119 11.5641 8.45374 11.6237 8.52858 11.6639C8.60343 11.704 8.68777 11.723 8.77259 11.7189C8.8574 11.7148 8.93952 11.6878 9.01016 11.6406L12.7602 9.14062C12.8246 9.09787 12.8775 9.03982 12.9141 8.97166C12.9507 8.9035 12.9698 8.82735 12.9698 8.75C12.9698 8.67265 12.9507 8.5965 12.9141 8.52834C12.8775 8.46018 12.8246 8.40213 12.7602 8.35938ZM9.21875 10.3742V7.12578L11.6547 8.75L9.21875 10.3742ZM16.875 3.28125H3.125C2.83492 3.28125 2.55672 3.39648 2.3516 3.6016C2.14648 3.80672 2.03125 4.08492 2.03125 4.375V13.125C2.03125 13.4151 2.14648 13.6933 2.3516 13.8984C2.55672 14.1035 2.83492 14.2188 3.125 14.2188H16.875C17.1651 14.2188 17.4433 14.1035 17.6484 13.8984C17.8535 13.6933 17.9688 13.4151 17.9688 13.125V4.375C17.9688 4.08492 17.8535 3.80672 17.6484 3.6016C17.4433 3.39648 17.1651 3.28125 16.875 3.28125ZM17.0312 13.125C17.0312 13.1664 17.0148 13.2062 16.9855 13.2355C16.9562 13.2648 16.9164 13.2812 16.875 13.2812H3.125C3.08356 13.2812 3.04382 13.2648 3.01451 13.2355C2.98521 13.2062 2.96875 13.1664 2.96875 13.125V4.375C2.96875 4.33356 2.98521 4.29382 3.01451 4.26451C3.04382 4.23521 3.08356 4.21875 3.125 4.21875H16.875C16.9164 4.21875 16.9562 4.23521 16.9855 4.26451C17.0148 4.29382 17.0312 4.33356 17.0312 4.375V13.125ZM17.9688 16.25C17.9688 16.3743 17.9194 16.4935 17.8315 16.5815C17.7435 16.6694 17.6243 16.7188 17.5 16.7188H2.5C2.37568 16.7188 2.25645 16.6694 2.16854 16.5815C2.08064 16.4935 2.03125 16.3743 2.03125 16.25C2.03125 16.1257 2.08064 16.0065 2.16854 15.9185C2.25645 15.8306 2.37568 15.7812 2.5 15.7812H17.5C17.6243 15.7812 17.7435 15.8306 17.8315 15.9185C17.9194 16.0065 17.9688 16.1257 17.9688 16.25Z" fill="#FC3D9D"/>
+</svg>
+`;
+
+theme.icon.wishlist = `
+<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M13.9062 3.28125C12.2656 3.28125 10.8391 4.02109 10 5.26094C9.16094 4.02109 7.73438 3.28125 6.09375 3.28125C4.85099 3.2827 3.65955 3.77702 2.78079 4.65579C1.90202 5.53455 1.4077 6.72599 1.40625 7.96875C1.40625 10.25 2.82812 12.6242 5.63281 15.0242C6.91801 16.1193 8.30626 17.0874 9.77813 17.9148C9.84634 17.9515 9.92257 17.9707 10 17.9707C10.0774 17.9707 10.1537 17.9515 10.2219 17.9148C11.6937 17.0874 13.082 16.1193 14.3672 15.0242C17.1719 12.6242 18.5938 10.25 18.5938 7.96875C18.5923 6.72599 18.098 5.53455 17.2192 4.65579C16.3405 3.77702 15.149 3.2827 13.9062 3.28125ZM10 16.9617C8.71797 16.2219 2.34375 12.3219 2.34375 7.96875C2.34478 6.97451 2.7402 6.02128 3.44324 5.31824C4.14628 4.6152 5.09951 4.21978 6.09375 4.21875C7.67812 4.21875 9.00859 5.06484 9.56641 6.42734C9.60172 6.51332 9.6618 6.58685 9.739 6.6386C9.81621 6.69035 9.90706 6.71798 10 6.71798C10.0929 6.71798 10.1838 6.69035 10.261 6.6386C10.3382 6.58685 10.3983 6.51332 10.4336 6.42734C10.9914 5.06484 12.3219 4.21875 13.9062 4.21875C14.9005 4.21978 15.8537 4.6152 16.5568 5.31824C17.2598 6.02128 17.6552 6.97451 17.6562 7.96875C17.6562 12.3219 11.282 16.2219 10 16.9617Z" fill="#FC3D9D"/>
+</svg>
+`;
 theme.functions.sideCartUpsell.products = [384705751];
 theme.functions.externalPrice = function(){
     if(!$('.pagina-produto .acoes-produto').length) return;
@@ -263,25 +275,24 @@ theme.functions.externalPrice = function(){
     });
 
     $('#formCalcularCep .btn').text('Calcular')
-    // Cria container para preço externo se não existir
     if(!$('#theme_external-price').length){
-        $('.pagina-produto .info-principal-produto').after('<div id="theme_external-price"></div>');
+        $('.produto .codigo-produto').first().after('<div id="theme_external-price"></div>');
     }
     
-    // Função para atualizar o preço externo
+    let produtoVideo = $(`.produto-video`);
+    if(produtoVideo.length){
+        produtoVideo.find(`a`).html(`${theme.icon.video} <span>Vídeo do Produto</span>`);
+        produtoVideo.find(`a`).first().prependTo(`.codigo-produto`)
+    }
     const updateExternalPrice = function(){
-        // Encontra o .acoes-produto visível
-        // Prioriza style inline (ex: style="display: flex;" sobrescreve class="hide")
         let visibleAcoes = $('.pagina-produto .acoes-produto').filter(function(){
             let inlineStyle = $(this).attr('style') || '';
             let displayValue = $(this).css('display');
             
-            // Se tem display inline e não é none, está visível
             if(inlineStyle.includes('display') && displayValue !== 'none'){
                 return true;
             }
             
-            // Se não tem display inline, verifica apenas a classe hide
             if(!inlineStyle.includes('display')){
                 return !$(this).hasClass('hide');
             }

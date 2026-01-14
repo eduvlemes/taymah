@@ -26,12 +26,13 @@ theme.lang.avisoEstoque = "Aproveite! Apenas [qtde] itens em estoque!";
 theme.lang.brandTitle = "Compre por Marca";
 
 theme.settings = {};
+theme.settings.mbSliderMobile = true;
 theme.settings.sideCheckout = true;
 theme.settings.whatsappButton = false;
 theme.settings.extraPagination = true;
 theme.settings.instagramFeed = false;
 theme.settings.productListImageFill = true;
-theme.settings.imageSize = 1.4;
+theme.settings.imageSize = .7;
 theme.settings.productExcerpt = false;
 theme.settings.avisoEstoque = 999;
 theme.settings.sliders = [];
@@ -43,6 +44,38 @@ theme.settings.galeriaZoom = false;
 
 theme.settings.invertHeader = false;
 
+theme.settings.sliders.miniBanners = {
+    infinite: true,
+    slidesToShow: 6,
+    slidesToScroll: 1,
+    autoplay: true,
+    dots:true,
+    autoplaySpeed: 2000,
+    
+    responsive: [
+        {
+        breakpoint: 9999,
+        settings: "unslick"
+        },
+        {
+        breakpoint: 990,
+        settings: {
+            slidesToShow: 2,
+            slidesToScroll: 2,
+            arrows:false
+        }
+        },
+        {
+        breakpoint: 440,
+        settings: {
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            arrows:false,
+            dots:true
+        }
+        }
+    ]
+}
 theme.settings.sliders.benefitsStripe = {
     dots: false,
     infinite: true,
@@ -59,17 +92,11 @@ theme.settings.sliders.benefitsStripe = {
         settings: "unslick"
         },
         {
-        breakpoint: 600,
+        breakpoint: 990,
         settings: {
             slidesToShow: 2,
-            slidesToScroll: 2
-        }
-        },
-        {
-        breakpoint: 480,
-        settings: {
-            slidesToShow: 1,
-            slidesToScroll: 1
+            slidesToScroll: 2,
+            arrows:false
         }
         }
     ]
@@ -524,18 +551,6 @@ theme.functions.checkoutProductImage = async function(){
                 }
             }
         });
-
-        // Remover primeiro td dos totais e adicionar colspan no novo primeiro
-        document.querySelectorAll('.bg-dark.esconder-mobile, .bg-dark.tr-checkout-frete').forEach(row => {
-            const firstTd = row.querySelector('td:first-child');
-            if (firstTd) {
-                firstTd.remove();
-                const newFirstTd = row.querySelector('td:first-child');
-                if (newFirstTd) {
-                    newFirstTd.setAttribute('colspan', '2');
-                }
-            }
-        });
     } catch (error) {
         console.error('Erro ao buscar dados do carrinho:', error);
     }
@@ -732,7 +747,7 @@ theme.functions.customBanners = function(ref){
             let regExp = /\[card-(.*?)\]/;
             let match = regExp.exec(alt);
             if($('.' + match[1]).length == 1){                
-                 $('.' + match[1] + ' + ul').prepend(`<li class="theme_cardBanner-${match[1]}"></li>`);
+                 $('.' + match[1] + ' + ul ').prepend(`<li class="theme_cardBanner-${match[1]}"></li>`);
                 $(this).closest('li').appendTo(`.theme_cardBanner-${match[1]}`);  
                 $(`.theme_cardBanner-${match[1]} > li`).wrap('<div class="item"/>').contents().unwrap();
                 
@@ -901,7 +916,11 @@ theme.functions.unwrapProductList = function(){
             let listagemQtdLinhas = $(this).parent('ul').attr('data-produtos-linha');
             theme.settings.sliders.products.slidesToShow = parseInt(listagemQtdLinhas);
             theme.functions.flexDestroy($(this));
-            listagemUL.find('.listagem-linha').slick(theme.settings.sliders.products);
+            let slickProducts = theme.settings.sliders.products;
+            if(listagemUL.find(`[class^="theme_cardBanner"]`).length > 0){
+                slickProducts.slidesToShow = slickProducts.slidesToShow - 1;
+            }
+            listagemUL.find('.listagem-linha').slick(slickProducts);
             $(this).removeClass('flexslider');
 
             listagemUL.find('[data-imagem-caminho]').each(function(){
@@ -939,12 +958,32 @@ theme.watch = function(){
 }
 
 theme.functions.productListImageSize = function(param){
+    $(`body`).css('--productImageHeightRatio', param);
+    theme.functions.productListImageSize = function(param){
+        document.body.style.setProperty('--productImageHeightRatio', param);
+
+        if(theme.settings.productListImageFill){
+            document.querySelectorAll('.listagem-item').forEach(el => el.classList.add('theme-imageFill'));
+        }
+
+        // let h = document.querySelector('.listagem-item .imagem-produto').offsetWidth * param;
+        // document.querySelectorAll('.listagem-item .imagem-produto').forEach(el => el.style.height = h + 'px');
+
+        document.querySelectorAll('.listagem-item .imagem-produto').forEach(container => {
+            container.querySelectorAll('img').forEach(img => {
+                let url = img.src.replace('300x300/','500x500/').replace('400x400/','600x600/');
+                img.src = url;
+            });
+        });
+
+        // document.querySelectorAll('.listagem-item .imagem-produto').forEach(el => el.style.maxHeight = 'unset');
+    }
     if(theme.settings.productListImageFill){
         $('.listagem-item').addClass('theme-imageFill');
     }
     
-    let h = $('.listagem-item').first().find('.imagem-produto').innerWidth() * param;
-    $('.listagem-item .imagem-produto').css('height',h + 'px');
+    // let h = $('.listagem-item').first().find('.imagem-produto').innerWidth() * param;
+    // $('.listagem-item .imagem-produto').css('height',h + 'px');
     
 
 
@@ -1718,6 +1757,18 @@ theme.functions['pagina-inicial'] = function(){
         theme.functions.flexDestroy($('.marcas .flexslider'));
         $('.marcas .slides').slick(theme.settings.sliders.brands);
         $('<div class="titulo-categoria cor-principal"><strong>'+ theme.lang.brandTitle +'</strong></div>').prependTo('.marcas');
+    }
+
+    if($(`.banner.mini-banner`).length){
+        $(`.banner.mini-banner .flexslider`).each(function(){
+            theme.functions.flexDestroy($(this));
+        });
+
+        $(`.banner.mini-banner > .span4`).removeClass(`span4`)
+    
+        $(`.banner.mini-banner`).slick(
+            theme.settings.sliders.miniBanners
+        );
     }
     
 };

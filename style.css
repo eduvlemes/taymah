@@ -151,6 +151,30 @@ border:3px solid #f1f1f1;
 border-radius: var(--borderRadius)!important;
 }
 
+.listagem-linha.slick-slider .slick-arrow{
+        background: #fff;
+    height: 46px;
+    width: 46px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, .25);
+        
+    box-sizing: border-box;
+}
+.listagem-linha.slick-slider .slick-arrow svg{
+    height: 20px;
+    width: 20px;
+}
+.listagem-linha.slick-slider .slick-arrow.arrow-l{
+    padding-right: 5px;
+    left: -13px;
+}
+.listagem-linha.slick-slider .slick-arrow.arrow-r{
+    padding-left: 5px;
+    right: -13px;
+}
 /* Handle on hover */
 html::-webkit-scrollbar-thumb:hover {
     background: #555;
@@ -462,7 +486,7 @@ textarea:focus{
 }
 
 /* PRODUCT LIST */
-.listagem .produtos-carrossel > .slick-slider{margin-left:-30px;margin-right:-30px;}
+.listagem .produtos-carrossel > .slick-slider{width: 100%;}
 .listagem .produtos-carrossel .listagem-linha li .listagem-item{margin:0 10px!important;}
 .listagem>ul:not(.produtos-carrossel){
     display: flex;
@@ -2611,20 +2635,7 @@ html[alpix-theme] body.pagina-produto .secao-principal > .produto .destaque-parc
 
 @media(max-width:990px){
     #theme_listing-filters{z-index:99}
-    #theme_listing-filters .filter-trigger{
-        position: fixed;
-        background: var(--primaryColor);
-        right: 0;
-        height: 40px;
-        width: 40px;
-        text-align: center;
-        border-radius: 5px 0 0 5px;
-        box-shadow: 0px 0px 20px rgb(0 0 0 / 50%);
-        top: 50%;
-        z-index: 10;
-    }
-    #theme_listing-filters .filter-trigger span{display:none}
-    #theme_listing-filters .filter-trigger svg{fill:#fff}
+
     #theme_list-functions{display:none;}
 
     #theme_listing{}
@@ -3501,7 +3512,11 @@ body:not(.pagina-inicial) .secao-banners .banner.cheio img{
     }
 }
 .listagem [class^="theme_cardBanner"] .item{
-    margin: 15px 0;
+    padding: 0 7.5px;
+}
+.listagem .slick-slider [class^="theme_cardBanner"] .item{
+    margin: 0 0;
+    padding: 0 7.5px;
 }
 .listagem [class^="theme_cardBanner"] .item img{
     object-fit: cover;
