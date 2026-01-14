@@ -3241,7 +3241,10 @@ html body.carrinho-checkout .identificacao #formularioLogin .login-data > .contr
     max-width: 100%;
 }
 .identificacao .senha-box{margin-right:130px}
-
+.carrinho-checkout .campos-pedido > .campos-pedido #login-content{
+    width: 100%;
+    max-width: 500px;
+}
 @media(max-width:990px){
     html body.carrinho-checkout .identificacao #formularioLogin .login-data > .control-group:before{display:none}
     html body.carrinho-checkout .identificacao #formularioLogin .login-data > .control-group{
@@ -3251,13 +3254,15 @@ html body.carrinho-checkout .identificacao #formularioLogin .login-data > .contr
         gap:15px;
         justify-content: center;
     }
-    html body.carrinho-checkout .identificacao #formularioLogin .login-data a{width:fit-content}
-    html body.carrinho-checkout .identificacao #formularioLogin .login-data > .control-group button{
+    html body.carrinho-checkout .identificacao #formularioLogin .login-data > .control-group{gap: 15px;}
+    
+    /* html body.carrinho-checkout .identificacao #formularioLogin .login-data a{width:fit-content} */
+    /* html body.carrinho-checkout .identificacao #formularioLogin .login-data > .control-group button{
         max-width: 100%;
         font-size: 14px;
         height: auto;
         line-height: 36px!important;
-    }
+    } */
     html body.carrinho-checkout .identificacao #formularioLogin .login-data > .control-group .senha-box{
         order: -1;
         width: 100%;
@@ -3557,7 +3562,7 @@ body:not(.pagina-inicial) .secao-banners .banner.cheio img{
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 99999;
+    z-index: 99999999999999999999;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -3576,8 +3581,8 @@ body:not(.pagina-inicial) .secao-banners .banner.cheio img{
 .theme_popup-content {
     position: relative;
     background: #fff;
-    border-radius: var(--borderRadius);
-    max-width: 800px;
+    border-radius: 5px;
+    max-width: 600px;
     width: 90%;
     max-height: 90vh;
     overflow: auto;
@@ -3644,10 +3649,9 @@ body:not(.pagina-inicial) .secao-banners .banner.cheio img{
 }
 
 .theme_popup-pricing {
-    margin: 20px 0;
-    padding: 15px;
-    background: #f9f9f9;
-    border-radius: calc(var(--borderRadius) / 3);
+    border-top: 1px solid #f2f2f2;
+    margin: 20px 0 0 0;
+    padding: 20px 0 0 0;
 }
 
 .theme_popup-price {
@@ -3722,7 +3726,7 @@ body:not(.pagina-inicial) .secao-banners .banner.cheio img{
     position: relative;
 }
 
-.theme_popup-option-value.color-option.selected::after {
+/* .theme_popup-option-value.color-option.selected::after {
     content: '✓';
     position: absolute;
     top: 50%;
@@ -3732,14 +3736,52 @@ body:not(.pagina-inicial) .secao-banners .banner.cheio img{
     font-size: 18px;
     font-weight: bold;
     text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
-}
+} */
+ #login-content .control-group input {
+    padding: 9px 16px;
+ }
+ html body.carrinho-checkout .identificacao #formularioLogin .login-data > .control-group{
+        margin: -15px 0 0 0 !important;
+        gap: 10px;
+ }
+ .identificacao .control-group .submit-email.botao.principal.grande {
+        width: 100% !important;
+    max-width: unset;
+    text-align: center;
+    justify-content: center;
+ }
+ #formularioLogin .control-group input,
+ .identificacao input{
+    border: 1px solid #ccc!important;
+ }
+ .identificacao .control-group .botao.principal{
+    width: 100% !important;
+    max-width: 100%;
+    margin: 0;
+    border-radius: 5px !important;
+ }
+ .identificacao .control-group .senha-box ~ *{
+    border-radius: 5px;
+    background: #ccc;
+    height: 42px;
+    font-size: 14px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    width: 100%;
+ }
+.theme_checkout-login.invisible,
+.theme_checkout-login ~ *{display: none;}
 
+.theme_checkout-login.invisible ~ *{display: block;}
 .theme_popup-option-value.unavailable {
     opacity: 0.5;
     cursor: pointer;
     position: relative;
 }
-
+.login-data .senha-box{order:-10}
 .theme_popup-option-value.unavailable::before {
     content: '✕';
     position: absolute;

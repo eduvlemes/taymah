@@ -958,8 +958,6 @@ theme.watch = function(){
 }
 
 theme.functions.productListImageSize = function(param){
-    $(`body`).css('--productImageHeightRatio', param);
-    theme.functions.productListImageSize = function(param){
         document.body.style.setProperty('--productImageHeightRatio', param);
 
         if(theme.settings.productListImageFill){
@@ -977,7 +975,17 @@ theme.functions.productListImageSize = function(param){
         });
 
         // document.querySelectorAll('.listagem-item .imagem-produto').forEach(el => el.style.maxHeight = 'unset');
-    }
+       document.querySelectorAll('[data-produtos-linha]').forEach(function(el) {
+        let h = el.querySelector('.listagem-item').offsetHeight;
+        let w = el.querySelector('.listagem-item').offsetWidth;
+        let aspect = w / h;
+        
+        el.style.setProperty('--productItemAspectRatio', aspect);
+        
+    });
+        
+        
+    
     if(theme.settings.productListImageFill){
         $('.listagem-item').addClass('theme-imageFill');
     }
@@ -1321,12 +1329,13 @@ theme.functions.openVariationPopup = async function(productId) {
             <div class="theme_popup-overlay"></div>
             <div class="theme_popup-content">
                 <button class="theme_popup-close" onclick="theme.functions.closeVariationPopup()">${theme.icon.close || '×'}</button>
-                <h3 class="theme_popup-title">${product.name}</h3>
+                
                 <div class="theme_popup-body">
                     <div class="theme_popup-image">
                         <img src="https://cdn.awsli.com.br/600x600${product.images[0].path}" alt="${product.name}" />
                     </div>
                     <div class="theme_popup-variations">
+                        <h3 class="theme_popup-title">${product.name}</h3>
                         <div class="theme_popup-options"></div>
                     </div>
                 </div>
@@ -2017,8 +2026,44 @@ theme.functions['pagina-carrinho'] = function(){
         // $('<legend class="titulo cor-secundaria"><i class="icon-archive"></i>Itens do pedido</legend>').insertBefore('.tabela-carrinho');
 
         $(`#login-content, .checkout-alerta-seguro`).wrapAll(`<div class="caixa-sombreada theme_checkout-login"></div>`);
+
+        // Monitorar o elemento .identificacao e adicionar/remover classe .invisible em .theme_checkout-login
+        //$(document).ready(function() {
+            function checkIdentification() {
+                if ($('.identificacao').css('display') === 'none') {
+                    $('.theme_checkout-login').addClass('invisible');
+                } else {
+                    $('.theme_checkout-login').removeClass('invisible');
+                }
+                $(`#id_email`).trigger(`keyup`);
+            }
+
+            // Verificação inicial
+            checkIdentification();
+
+            // Usar MutationObserver para detectar mudanças no estilo
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+                        checkIdentification();
+                    }
+                });
+            });
+
+            // Observar o elemento .identificacao se existir
+            const identificacaoElement = document.querySelector('.identificacao');
+            if (identificacaoElement) {
+                observer.observe(identificacaoElement, {
+                    attributes: true,
+                    attributeFilter: ['style']
+                });
+            }
+        //});
+        
         theme.functions.checkoutPlaceholders();
         theme.functions.checkoutProductImage();
+
+
     }
 };
 
