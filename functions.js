@@ -968,6 +968,9 @@ theme.functions.init = function(){
 theme.functions.unwrapProductList = function(){
     $('.listagem > ul > li > ul > li').attr('class','');
     $('.listagem-item').unwrap().unwrap().unwrap().wrap('<li/>');
+    $(`.listagem-item`).each(function(){
+        $(this).find(`.imagem-produto`).appendTo($(this).find(`.produto-sobrepor`))
+    })
     if($('.listagem-linha.flexslider').length){
         $('.listagem-linha.flexslider').each(function(){
             let listagemUL = $(this).parent('ul');

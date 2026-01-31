@@ -57,7 +57,7 @@ theme.footerContacts = `<p><strong>(99) 98757-6100</strong></p>
 
 theme.templates.footer = `
 <div class="theme_footer-newsletter">
-    <div><img src="${repo_url}/assets/tay_ico_footer_rosa.svg"/></div>
+    <div><img src="${repo_url}/assets/tay_ico_footer_rosa_.svg"/></div>
     <div id="theme_footer-content4"></div>
     <div id="theme_footer-content-social"></div>
 </div>

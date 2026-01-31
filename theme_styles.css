@@ -2014,7 +2014,10 @@ font-size: calc(var(--titleFontSize) * .8);
     margin-bottom: calc(var(--headerHeight) * -1);
     
 }
-.pagina-inicial #cabecalho .menu.superior{background: transparent;}
+#cabecalho{
+    background: rgba(255,255,255,.7);
+}
+ #cabecalho .menu.superior{background: transparent;}
 .pagina-inicial #cabecalho:not(.fixed):not(:hover) {
     background: transparent;
 }
@@ -2023,7 +2026,7 @@ font-size: calc(var(--titleFontSize) * .8);
 .pagina-inicial #cabecalho:not(.fixed){}
 .pagina-inicial #cabecalho.fixed{}
 
-#cabecalho:not(.fixed):not(:hover) .menu.superior .nivel-um > li > a > strong {
+.pagina-inicial #cabecalho:not(.fixed):not(:hover) .menu.superior .nivel-um > li > a > strong {
     color: #fff;
 }
 .pagina-inicial #cabecalho:not(.fixed):not(:hover) #theme_header-menu-trigger svg,
