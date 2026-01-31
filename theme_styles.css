@@ -90,6 +90,8 @@
     --productPriceStrikeFontWeight: 300;
     --productPriceStrikeFontSize: 12px;
     --productPriceStrikeColor:var(--c4);  
+
+    --borderRadius:5px;
 }
 
 #theme_header-logo{order: 2;}
@@ -217,7 +219,9 @@
     }
     .produto{margin-top: 1rem;}
 }
-
+.filter-trigger *{
+    color: #000!important;
+}
 .filter-trigger{
     background: #f2f2f2;
     border-radius: 5px;
@@ -1546,7 +1550,7 @@ border-radius: 4px !important;
 }
 @media(max-width:990px){
     :root{
-        --logoMobile:22px;
+        --logoMobile:26px;
         --titleFontSize:18px;
     }
     .theme_checkout-login{
@@ -1557,24 +1561,25 @@ border-radius: 4px !important;
     .pagina-carrinho.carrinho-checkout #cabecalho h1{font-size: 0;line-height: 30px;}
     .sideCart-visible .theme_sideCart-upsell{display: none!important;}
     #theme_header-functions > li:nth-child(2){display: none;}
+    #theme_header-menu-trigger svg,
     #theme_header-menu-trigger{
-        height: 20px;
-        width: 20px;
+        height: 24px;
+        width: 24px;
         border: 0;
         padding: 0;
         
     }
     #theme_header-functions > li > a, #theme_header-functions > li > button, #theme_header-functions .carrinho > a, #theme_header-functions > li > a > svg, #theme_header-functions .carrinho > a > svg,
     #theme_header-functions img{
-        height: 20px;
-        width: 20px;
+        height: 24px;
+        width: 24px;
     }
     #theme_header-menu-trigger:after,
     #theme_header-menu-trigger:before{display: none;}
 
     #theme_sideCart, .theme_aside{
         width: 100dvw;
-        max-width: 440px;
+        max-width: 320px;
     }
 
     .conteiner-principal{overflow-x: hidden;}
@@ -1652,7 +1657,7 @@ border-radius: 4px !important;
     }
 
     .pagina-produto #corpo .secao-principal{padding: 0;}
-    .pagina-produto .produto-thumbs{display: none;}
+    /* .pagina-produto .produto-thumbs{display: none;} */
     .pagina-produto .produto .conteiner-imagem{    margin: 0 -.75rem;}
     .pagina-produto .produto .conteiner-imagem img{border-radius: 10px;}
 
@@ -1842,6 +1847,8 @@ border-radius: 4px !important;
         display: flex;
         justify-content: space-between;
     }
+    .pagina-carrinho.carrinho-checkout .tabela-carrinho tbody tr.bg-dark[style="display: none;"]{display: none!important;}
+    .pagina-carrinho.carrinho-checkout .tabela-carrinho tbody tr.bg-dark:not(:last-child) td:first-child{display: none;}
     .pagina-carrinho.carrinho-checkout .tabela-carrinho tbody tr .visible-phone{display: none!important;}
     .pagina-carrinho.carrinho-checkout .tabela-carrinho tbody tr,
     .pagina-carrinho.carrinho-checkout .tabela-carrinho tbody tr *{box-sizing: border-box;}
@@ -1935,10 +1942,117 @@ border-radius: 4px !important;
     z-index: 2;
     right: 0;
 }
-    .resumo-compra .tabela-carrinho td.conteiner-qtd div {
-        font-size: 12px;
-        padding: 3px 10px;
-        background-color: rgba(0, 0, 0, 0.1);
-        border-radius: 8px;
-        font-weight: bold;
+.resumo-compra .tabela-carrinho td.conteiner-qtd div {
+    font-size: 12px;
+    padding: 3px 10px;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+
+@media(max-width:767px){
+    [class^="theme_cardBanner"] {
+        width: 100%
     }
+    [class^="theme_cardBanner"] img{
+        aspect-ratio: unset;
+    }
+}
+.pagina-carrinho.carrinho-checkout #finalizarCompra,
+.pagina-produto .secao-principal > .produto > .row-fluid:first-child .acoes-produto .comprar a, .produto .principal .comprar .botao-comprar,
+#theme_sideCart #theme_sideCart-footer a.botao-comprar{
+    border-radius: 5px!important;
+}
+
+.caixa-destaque{
+    text-align: center;
+}
+.pagina-carrinho .cabecalho-interno h1{
+    text-align: center!important;
+    margin: 2rem 0 1rem 0!important;
+    border: 0 !important;
+    border-bottom: 0px!important;
+}
+.modal-header .titulo,
+.caixa-destaque h1{
+    text-align: center;
+    font-family: var(--titleFontFamily);
+    text-transform: var(--titleFontTransform);
+    font-weight: var(--titleFontWeight);
+    font-size: var(--titleFontSize);
+
+    position: relative;
+    color: var(--titleFontColor);
+}
+.modal-header .titulo{
+font-size: calc(var(--titleFontSize) * .8);
+}
+.modal{
+        border-radius: 0;
+}
+@media(max-width:990px){
+    .conteiner-imagem {
+    display: none !important;
+    }
+    .produto-thumbs{margin:0 -.5rem;}
+    .produto-thumbs span,
+    .produto-thumbs span img{width:100%;max-width:unset;}
+    #carouselImagem .slick-slide{opacity:1!important;}
+    /* .thumbs-horizontal #carouselImagem .slick-slider{margin:0 -5px;} */
+    .thumbs-horizontal li{margin:0 3px;}
+    .produto-thumbs .thumbs-horizontal{display: block;}
+    .thumbs-horizontal .slick-slider .slick-dots {
+        bottom: 10px;
+        z-index: 1;
+    }
+}
+
+
+.pagina-inicial{}
+.pagina-inicial #cabecalho{
+    margin-bottom: calc(var(--headerHeight) * -1);
+    
+}
+.pagina-inicial #cabecalho .menu.superior{background: transparent;}
+.pagina-inicial #cabecalho:not(.fixed):not(:hover) {
+    background: transparent;
+}
+@media(min-width:990px){.menu.superior li a{border: 0!important;}}
+
+.pagina-inicial #cabecalho:not(.fixed){}
+.pagina-inicial #cabecalho.fixed{}
+
+#cabecalho:not(.fixed):not(:hover) .menu.superior .nivel-um > li > a > strong {
+    color: #fff;
+}
+.pagina-inicial #cabecalho:not(.fixed):not(:hover) #theme_header-menu-trigger svg,
+.pagina-inicial #cabecalho:not(.fixed):not(:hover) #theme_header-functions img,
+.pagina-inicial #cabecalho:not(.fixed):not(:hover) .logo img {
+    filter: brightness(0) invert(1);
+}
+
+.pagina-inicial #cabecalho {
+    transition: background .3s ease-in-out !important;
+}
+.theme_worker-topbarSlider{overflow: hidden;}
+.formas-de-pagamento-ico img{filter:invert(1)}
+.formas-de-pagamento-ico {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+}
+.formas-de-pagamento-ico img {
+    max-height: 20px;
+}
+@media(max-width:990px){
+    .conteiner-principal{
+        overflow-x: unset!important;
+    }
+    #cabecalho{
+        position: sticky;
+        top: 0;
+        z-index: 99999999;
+    }
+}

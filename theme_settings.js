@@ -57,7 +57,7 @@ theme.footerContacts = `<p><strong>(99) 98757-6100</strong></p>
 
 theme.templates.footer = `
 <div class="theme_footer-newsletter">
-    <div><img src="${repo_url}/assets/tay_ico_footer.svg"/></div>
+    <div><img src="${repo_url}/assets/tay_ico_footer_rosa.svg"/></div>
     <div id="theme_footer-content4"></div>
     <div id="theme_footer-content-social"></div>
 </div>
@@ -82,7 +82,10 @@ theme.templates.footer = `
         </div>
     </div>
 </div>
-`
+`;
+
+theme.customFooterPayments =`<div class="formas-de-pagamento-ico"><img src="https://cdn.jsdelivr.net/gh/eduvlemes/dra_charm/assets/visa-logo.png" alt="visa" class="payment-icon"><img src="https://cdn.jsdelivr.net/gh/eduvlemes/dra_charm/assets/mastercard-logo.png" alt="mastercard" class="payment-icon"><img src="https://cdn.jsdelivr.net/gh/eduvlemes/dra_charm/assets/elo-logo.png" alt="elo" class="payment-icon"><img src="https://cdn.jsdelivr.net/gh/eduvlemes/dra_charm/assets/american-express-logo.png" alt="american express" class="payment-icon"><img src="https://cdn.jsdelivr.net/gh/eduvlemes/dra_charm/assets/pix-logo.png" alt="pix" class="payment-icon"></div>`;
+
 
 theme.settings.footer.social = true
 theme.socialIcons = `
@@ -212,6 +215,32 @@ $(document).ready(function(){
         });
     }
     theme.functions.asideMenuFunctions();
+    
+    const $cabecalho = $('#cabecalho');
+    const isHomePage = $('.pagina-inicial').length > 0;
+          
+    let topBarHeight_ = $(`.theme_worker-topbarSlider`).innerHeight();
+    let headerHeight_ = $(`#cabecalho`).innerHeight();
+    document.body.style.setProperty('--topbarHeight', `${topBarHeight_}px`); 
+    document.body.style.setProperty('--headerHeight', `${headerHeight_}px`); 
+    if (isHomePage) {
+    const onScroll = () => {
+        const topBarHeight = $(`.theme_worker-topbarSlider`).innerHeight();
+        const headerHeight = $(`#cabecalho`).innerHeight();
+        document.body.style.setProperty('--topbarHeight', `${topBarHeight}px`); 
+        document.body.style.setProperty('--headerHeight', `${headerHeight}px`); 
+        if (window.scrollY > topBarHeight) {
+        $cabecalho.addClass('fixed');
+        } else {
+        $cabecalho.removeClass('fixed');
+        }
+    };
+    $(window).on('scroll', onScroll);
+    onScroll();
+    } else {
+    $cabecalho.removeClass('fixed');
+    $(window).off('scroll');
+    }
 });
 theme.asideFunctions = [
     {
