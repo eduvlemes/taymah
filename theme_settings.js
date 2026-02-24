@@ -104,7 +104,7 @@ theme.socialIcons = `
 `
 
 $(document).ready(function(){
-    $(`.logo img`).attr('src', `${repo_url}/assets/tay_logo.svg`);
+    $(`.logo img`).attr('src', `${repo_url}/assets/tay_logo_pink.svg`);
 
      // Inicializa preço externo na página de produto
     theme.functions.externalPrice();
@@ -350,5 +350,121 @@ theme.functions.externalPrice = function(){
     $('.pagina-produto .atributo-item').on('click', function(){
         setTimeout(updateExternalPrice, 100);
     });
+};
+
+  
+
+theme.functions.createHeroSection = function(config) {
+    // Configurações padrão
+    const defaults = {
+        id: 'theme-hero-' + Date.now(),
+        title: 'Nova Coleção',
+        subtitle: '',
+        description: '',
+        buttonText: 'Ver Coleção',
+        buttonLink: '#',
+        imageUrl: '',
+        coverImageUrl: `${repo_url}/assets/video_cover.png`,
+        youtubeVideoId: 'nMfPqeZjc2c',
+        backgroundColor: '#fff',
+        textColor: '#000',
+        insertSelector: '#rodape'
+    };
+
+    // Mescla com configurações fornecidas
+    const settings = Object.assign({}, defaults, config);
+
+    // HTML do ícone de vídeo (apenas se houver youtubeVideoId)
+    const videoIcon = settings.youtubeVideoId ? `
+        <div class="theme_hero-video-icon" data-video-id="${settings.youtubeVideoId}">
+            <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="40" cy="40" r="40" fill="#fff" opacity="0.9"/>
+                <path d="M51.04 33.4375L40.04 25.4375C39.776 25.2495 39.4296 25.1541 39.0904 25.1544C38.7511 25.1548 38.4051 25.2509 38.1418 25.4402C37.8785 25.6294 37.7048 25.8976 37.7051 26.1801V53.8201C37.7048 54.1026 37.8785 54.3708 38.1418 54.56C38.4051 54.7492 38.7511 54.8453 39.0904 54.8457C39.4296 54.8459 39.776 54.7505 40.04 54.5625L51.04 46.5625C51.2782 46.3931 51.4528 46.1629 51.5424 45.8973C51.632 45.6317 51.632 45.3433 51.5424 45.0777C51.4528 44.8121 51.2782 44.5819 51.04 44.4125L51.04 33.4375Z" fill="#FC3D9D"/>
+            </svg>
+        </div>
+    ` : '';
+
+    // HTML da imagem de capa (se fornecida)
+    const coverImage = settings.coverImageUrl ? `
+        <img src="${settings.coverImageUrl}" alt="Capa ${settings.title}" class="theme_hero-cover-image" />
+    ` : '';
+
+    // HTML da seção hero
+    const heroHTML = `
+        <div id="${settings.id}" class="theme_hero-section" style="background-color: ${settings.backgroundColor}; color: ${settings.textColor};">
+            <div class="conteiner-fluid">
+                <div class="row-flex align-items-center" style="min-height: 500px; padding: 3rem 2rem;">
+                    <!-- Conteúdo à esquerda -->
+                    <div class="col theme_hero-content">
+                        <h1 class="theme_hero-title" style="color: ${settings.textColor};">${settings.title}</h1>
+                        ${settings.subtitle ? `<p class="theme_hero-subtitle" style="color: ${settings.textColor};">${settings.subtitle}</p>` : ''}
+                        ${settings.description ? `<p class="theme_hero-description" style="color: ${settings.textColor};">${settings.description}</p>` : ''}
+                        <a href="${settings.buttonLink}" class="theme_hero-button">
+                            ${settings.buttonText}
+                        </a>
+                    </div>
+
+                    <!-- Imagem à direita -->
+                    ${settings.imageUrl ? `
+                    <div class="col-auto theme_hero-image-container">
+                        <div class="theme_hero-image-wrapper">
+                            ${coverImage}
+                            <img src="${settings.imageUrl}" alt="${settings.title}" class="theme_hero-image" />
+                            ${videoIcon}
+                        </div>
+                    </div>
+                    ` : ''}
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Insere a seção na página
+    $(settings.insertSelector).before(heroHTML);
+
+    // Evento de clique no ícone de vídeo
+    if (settings.youtubeVideoId) {
+        $(`#${settings.id} .theme_hero-video-icon`).on('click', function() {
+            const videoId = $(this).data('video-id');
+            const modalId = `video-modal-${settings.id}`;
+            
+            // Cria o modal se não existir
+            if ($(`#${modalId}`).length === 0) {
+                const videoModal = `
+                    <div id="${modalId}" class="theme_hero-video-modal">
+                        <div class="theme_hero-video-overlay"></div>
+                        <div class="theme_hero-video-container">
+                            <button class="theme_hero-video-close">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z" fill="#fff"/>
+                                </svg>
+                            </button>
+                            <iframe 
+                                width="100%" 
+                                height="100%" 
+                                src="https://www.youtube.com/embed/${videoId}?autoplay=1" 
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen>
+                            </iframe>
+                        </div>
+                    </div>
+                `;
+                $('body').append(videoModal);
+            }
+            
+            // Mostra o modal
+            $(`#${modalId}`).addClass('active');
+            $('body').addClass('modal-open');
+            
+            // Fecha ao clicar no overlay ou botão
+            $(`#${modalId} .theme_hero-video-overlay, #${modalId} .theme_hero-video-close`).on('click', function() {
+                $(`#${modalId}`).removeClass('active');
+                $('body').removeClass('modal-open');
+            });
+        });
+    }
+
+    return $('#' + settings.id);
 };
 
