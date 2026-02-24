@@ -403,7 +403,7 @@ theme.build.asideMenu = function(template){
         $(this).closest('.com-filho').removeClass('open');
     });
     $('#theme_header-menu-trigger, .theme_menu-trigger').click(function(){   
-        $('body').toggleClass('asideMenu-visible');         
+        $('html').toggleClass('asideMenu-visible');         
     });
 };
 
@@ -411,7 +411,7 @@ theme.build.productFilter = function(template){
     if($('.coluna .filtro-coluna').length > 0){
         $('body').append(theme.templates.filters);
         $('body').on('click','.filter-trigger', function(){   
-            $('body').toggleClass('asideFilter-visible');         
+            $('html').toggleClass('asideFilter-visible');         
         });
         if($('.coluna .atributo-cor').length > 0 ){
             $('.coluna .atributo-cor a > span').wrap("<i class='color-bg'></i>")
@@ -437,7 +437,7 @@ theme.build.search = function(template){
     $('#theme_search .botao.icon-search').removeClass('icon-search');
 
     $('.search-trigger').click(function(){   
-        $('body').toggleClass('asideSearch-visible');         
+        $('html').toggleClass('asideSearch-visible');         
         $('#theme_search input').val('');
         //$('#theme_search input').autocomplete('destroy');
     });
@@ -507,7 +507,7 @@ theme.build.account = function(template){
     //menu.append('<li><a href="">Fale com a gente</a></li>');
     $('#theme_account').append(menu);
     $('.account-trigger').click(function(){   
-        $('body').toggleClass('asideAccount-visible');         
+        $('html').toggleClass('asideAccount-visible');         
     });
 
     $('#recoverPassword').click(function(){
@@ -959,7 +959,7 @@ theme.functions.init = function(){
         observerMenu.observe(el);    
         $('body').css('opacity','1');
         $('.theme_aside-shadow').click(function(){
-            $('body').removeClass('sideCart-visible').removeClass('asideSearch-visible').removeClass('asideMenu-visible').removeClass('asideAccount-visible');
+            $('html').removeClass('sideCart-visible').removeClass('asideSearch-visible').removeClass('asideMenu-visible').removeClass('asideAccount-visible');
         })
     }catch(e){
         $('body').css('opacity','1')
@@ -1730,7 +1730,7 @@ theme.functions.sideCartSet = function(){
 }
 theme.functions.sideCart = function(){
     $('#theme_sideCart .theme_sideCart-upsell').hide();
-    $('body').addClass('sideCart-visible');  
+    $('html').addClass('sideCart-visible');  
     theme.functions.sideCartScroll();  
 }
 theme.functions.sideCartLoadContent = function(){
@@ -1832,7 +1832,7 @@ theme.functions.sideCartToggle = function(){
     if($('#theme_sideCart-content:empty').length){
         theme.functions.sideCartLoadContent();
     }
-    $('body').toggleClass('sideCart-visible');
+    $('html').toggleClass('sideCart-visible');
 }
 
 theme.functions['pagina-cadastro'] = function(){

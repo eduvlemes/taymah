@@ -2058,4 +2058,10 @@ font-size: calc(var(--titleFontSize) * .8);
         top: 0;
         z-index: 99999999;
     }
+    .asideFilter-visible,
+    .sideCart-visible,
+    .asideSearch-visible,
+    .asideMenu-visible{
+        overflow-y: hidden;
+    }
 }
