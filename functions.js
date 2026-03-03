@@ -2117,7 +2117,7 @@ theme.functions['pagina-carrinho'] = function(){
         // $('.tabela-carrinho').wrap('<div class="caixa-sombreada theme_order-resume"></div>');
         // $('<legend class="titulo cor-secundaria"><i class="icon-archive"></i>Itens do pedido</legend>').insertBefore('.tabela-carrinho');
 
-        $(`#login-content, .checkout-alerta-seguro`).wrapAll(`<div class="caixa-sombreada theme_checkout-login"></div>`);
+        $(`#login-content, .checkout-alerta-seguro`).wrapAll(`<div class="caixa-sombreada theme_checkout-login invisible"></div>`);
 
         // Monitorar o elemento .identificacao e adicionar/remover classe .invisible em .theme_checkout-login
         //$(document).ready(function() {
@@ -2125,7 +2125,7 @@ theme.functions['pagina-carrinho'] = function(){
                 if ($('.identificacao').css('display') === 'none') {
                     $('.theme_checkout-login').addClass('invisible');
                 } else {
-                    $('.theme_checkout-login').removeClass('invisible');
+                    //$('.theme_checkout-login').removeClass('invisible');
                 }
                 $(`#id_email`).trigger(`keyup`);
             }

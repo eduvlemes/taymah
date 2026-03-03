@@ -472,6 +472,9 @@ theme.functions.createHeroSection = function(config) {
 };
 
 $(document).ready(function(){
+
+    if($(`.pagina-inicial`).length === 0) return;
+    
     theme.functions.createHeroSection({
     id: 'hero-summer',
     title: 'SUMMER 2026',

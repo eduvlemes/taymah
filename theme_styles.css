@@ -492,14 +492,14 @@ display: none;
 
 #formCalcularCep{}
 #formCalcularCep input{
-    border-radius: 0!important;
+    
     background: #f2f2f2;
     width: 100%;
 }
 #formCalcularCep .btn{
     text-transform: uppercase;
     background: var(--c4);
-    border-radius: 0!important;
+    
     text-shadow: 0px 0px 0px;
     color: #fff;
     padding: 0 30px!important;
@@ -543,7 +543,7 @@ display: none;
 }
 .theme_popup-add-to-cart.botao.principal{
     background-color: var(--c1);
-    border-radius: 0!important;
+    
     text-shadow: 0px 0px 0px;
 }
 .produtos-carrossel{
@@ -1151,7 +1151,7 @@ order: -1;
 @media (max-width: 767px) {
     .pagina-carrinho.carrinho-checkout .campos-pedido .campos-pedido {
         padding: 20px 10px;
-        gap: 20px;
+        gap: 5px;
     }
     
     .pagina-carrinho.carrinho-checkout .caixa-sombreada {
@@ -1788,7 +1788,7 @@ border-radius: 4px !important;
         margin-right: 0;
     }
     #theme_external-price .titulo:not(s){font-weight: bold;}
-#theme_menu-aside .menu.superior > .nivel-um{height: -webkit-fill-available;}
+#theme_menu-aside .menu.superior > .nivel-um{    flex: 1 1 100%;}
 #theme_sideCart #theme_sideCart-content .table-body td:nth-child(3),
 #theme_sideCart #theme_sideCart-content .table-body td:nth-child(4){
         display: flex !important;
@@ -1872,8 +1872,9 @@ border-radius: 4px !important;
     }
 
     .pagina-carrinho.carrinho-checkout #formularioCheckout .caixa-sombreada{
-        padding: 1.5rem;
+        padding: 1.5rem 1.5rem 0 1.5rem;
         box-sizing: border-box;
+        margin: 0;
     }
     .pagina-carrinho.carrinho-checkout #formularioCheckout{
         padding: 0;
@@ -2566,4 +2567,15 @@ body.modal-open {
 
 #theme_menu-aside .menu.superior > .nivel-um > li, #theme_menu-aside .menu.superior > .nivel-um .nivel-dois > li{
     width: 100%;
+}
+.parent_div_id_telefone_principal + div,
+.control-group.span6.parent_div_id_telefone_principal {
+    display: none !important;
+}
+.formas.envio .accordion-heading .forma-conteiner .text-content{
+        width: 150px;
+}
+.formas.envio .accordion-heading .forma-conteiner .text-content > span{
+    display: flex;
+    justify-content: space-between;
 }
