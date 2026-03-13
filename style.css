@@ -1574,8 +1574,8 @@ body #rodape .gateways-rodape{
 .pagina-carrinho .tabela-carrinho .form-horizontal .controls .input-append button{
     width:120px;
 }
-.tabela-carrinho thead tr th:last-child *,
-.tabela-carrinho tbody tr[data-produto-id] td:last-child .excluir{
+.pagina-carrinho .tabela-carrinho thead tr th:last-child *,
+.pagina-carrinho .tabela-carrinho tbody tr[data-produto-id] td:last-child .excluir{
     text-align:center!important
 }
 .pagina-carrinho .tabela-carrinho form .control-group:before,
@@ -2536,13 +2536,13 @@ html[alpix-theme] body.pagina-produto .secao-principal > .produto .destaque-parc
     align-items: flex-end;
     width: 100%;
 }
-.tabela-carrinho [data-produto-id] .conteiner-imagem,
-.tabela-carrinho [data-produto-id] .conteiner-imagem .imagem{
+.pagina-carrinho .tabela-carrinho [data-produto-id] .conteiner-imagem,
+.pagina-carrinho .tabela-carrinho [data-produto-id] .conteiner-imagem .imagem{
     width: 35px;
     box-sizing: border-box;
     display: block;
 }
-.tabela-carrinho img {
+.pagina-carrinho .tabela-carrinho img {
     max-width: 90px;
     width: 90px;
     max-height: unset;
@@ -3739,18 +3739,29 @@ body:not(.pagina-inicial) .secao-banners .banner.cheio img{
     flex-wrap: wrap;
     gap: 10px;
 }
-
-.theme_popup-option-value {
-    padding: 10px 20px;
-    border: 2px solid #ddd;
-    background: #fff;
-    border-radius: calc(var(--borderRadius) / 3);
+.theme_popup-option-value.color-option {
+        border-radius: 50%;
+    box-shadow: 0 0 3px rgb(0 0 0 / 50%);
+}
+.theme_popup-option-value:not(.color-option) {
+padding: 0 10px;
     cursor: pointer;
     transition: all 0.3s ease;
+    font-weight: 400;
+    min-height: 42px;
+    min-width: 42px;
+    border-radius: 5px;
+    background: #f2f2f2;
+    border: 0;
+    line-height: 36px;
+    text-align: center;
+    box-sizing: border-box;
     font-size: 14px;
-    font-weight: 500;
+    color: #888888;
 }
-
+.theme_popup-option-value.color-option.selected{
+    0px 0px 0px 1.5px rgb(0 0 0) !important
+}
 .theme_popup-option-value:hover {
     border-color: var(--primaryColor);
 }
@@ -3762,8 +3773,8 @@ body:not(.pagina-inicial) .secao-banners .banner.cheio img{
 }
 
 .theme_popup-option-value.color-option {
-    width: 40px;
-    height: 40px;
+    width: 26px;
+    height: 26px;
     padding: 0;
     border-radius: 50%;
     position: relative;
@@ -3826,16 +3837,16 @@ body:not(.pagina-inicial) .secao-banners .banner.cheio img{
 }
 .login-data .senha-box{order:-10}
 .theme_popup-option-value.unavailable::before {
-    content: '✕';
+    content: "\f00d";
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    top: -4px;
+    right: -4px;
     color: #ff0000;
-    font-size: 20px;
-    font-weight: bold;
+    font-size: 15px;
     z-index: 1;
     pointer-events: none;
+    font-family: 'FontAwesome';
+    line-height: 15px;
 }
 
 .theme_popup-option-value.unavailable:hover {

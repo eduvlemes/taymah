@@ -1587,9 +1587,25 @@ theme.functions.openVariationPopup = async function(productId) {
     // Evento de adicionar ao carrinho
     $(document).on('click', '#theme_variationPopup .theme_popup-add-to-cart', function(e) {
         e.preventDefault();
-        let skuId = $(this).attr('data-sku-id');
+        let $btn = $(this);
+        let skuId = $btn.attr('data-sku-id');
         if(skuId) {
-            window.location.href = `/carrinho/produto/${skuId}`;
+            $btn.addClass('loading').prop('disabled', true);
+            $.ajax({
+                url: `/carrinho/produto/${skuId}/adicionar`,
+                dataType: 'json'
+            }).done(function(p) {
+                if(p.status !== 'sucesso') {
+                    alert(p.mensagem);
+                    $btn.removeClass('loading').prop('disabled', false);
+                } else {
+                    theme.functions.closeVariationPopup();
+                    $("#theme_sideCart-content").empty();
+                    theme.functions.sideCartLoadContent();
+                }
+            }).fail(function() {
+                window.location.href = `/carrinho/produto/${skuId}/adicionar`;
+            });
         }
     });
     
@@ -1731,19 +1747,8 @@ theme.functions.sideCartSet = function(){
 theme.functions.sideCart = function(){
     $('#theme_sideCart .theme_sideCart-upsell').hide();
     $('html').addClass('sideCart-visible');  
-    theme.functions.sideCartScroll();  
-}
-theme.functions.sideCartLoadContent = function(){
     
-     $("#theme_sideCart-content").load("/carrinho/mini", function(response) {   
-        
-        $(`#theme_sideCart-content img`).each(function(){
-                let src = $(this).attr(`src`).replace(`64x64`,`200x200`);
-                $(this).attr(`src`,src)
-            })
-            let subtotal = parseFloat($('#theme_sideCart-content [data-subtotal-valor]').attr('data-subtotal-valor'));
-            
-            // Criar estrutura de cupom/vale com toggle
+        // Criar estrutura de cupom/vale com toggle
             let cupomHtml = `
                 <div class="apx-sideFunction cupom">
                     <button type="button" class="cupom-toggle">
@@ -1761,7 +1766,7 @@ theme.functions.sideCartLoadContent = function(){
                     </form>
                 </div>
             `;
-            
+          
             $(cupomHtml).insertBefore('#theme_sideCart-content .table-footer');
             
             // Evento de toggle do cupom
@@ -1804,6 +1809,19 @@ theme.functions.sideCartLoadContent = function(){
                 alert('Digite o código do cupom e tente novamente.');
             }
         });
+    theme.functions.sideCartScroll();  
+}
+theme.functions.sideCartLoadContent = function(){
+    
+     $("#theme_sideCart-content").load("/carrinho/mini", function(response) {   
+        
+            $(`#theme_sideCart-content img`).each(function(){
+                let src = $(this).attr(`src`).replace(`64x64`,`200x200`);
+                $(this).attr(`src`,src)
+            })
+            let subtotal = parseFloat($('#theme_sideCart-content [data-subtotal-valor]').attr('data-subtotal-valor'));
+            
+            
         
         theme.functions.sideCart();
        
@@ -1825,6 +1843,7 @@ theme.functions.sideCartLoadContent = function(){
                 theme.functions.sideCartUpsell.run(cartProductIds);
             }
         }
+        
     })
 }
 theme.functions.sideCartToggle = function(){
